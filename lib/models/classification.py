@@ -1,8 +1,11 @@
 # lib/models/classification.py
 from models.__init__ import CURSOR, CONN
-from models.model_helpers import validate_attribute_text
+from models.model_helpers import (
+    validate_attribute_text,
+    format_string_cell
+)
 
-NAME_COL_LIMIT = 52
+
 
 class Classification:
     all = {}
@@ -12,18 +15,18 @@ class Classification:
         self.name = name
         self.geographic_location = geographic_locaiton
         
-    def __repr__(self) -> str:
-        lengths = len(str(self.id) + self.name + self.geographic_location)
-        
-        combined_string = ""
-        return combined_string
+    def __repr__(self):
+        return f" {'{:0>2}'.format(self.id)} | {format_string_cell(self.name)} | {self.geographic_location} "
         
     @classmethod
     def table_heading(cls):
+        pass
         title = "Language Classifications"
-        header = f" id | name | geographic_location "
-        line = '_' * len(header)
-        return title + "\n" + header + "\n" + line
+        header = f" id | {format_string_cell('name')} | geographic_location "
+        line = '-' * len(header)
+        print(title)
+        print(header)
+        print(line)
     
     @property
     def name(self):
