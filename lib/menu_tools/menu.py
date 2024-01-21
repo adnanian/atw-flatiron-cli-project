@@ -2,9 +2,12 @@
 from menu_tools.command import Command
 
 class Menu:
+    all = {}
     
-    def __init__(self, command_list=[]):
+    def __init__(self, key_name, command_list=[]):
         self.command_list = []
+        self.key_name = key_name
+        type(self).all[key_name] = self
         
     def add_command(self, prompt, callback):
         self.command_list.append(
