@@ -21,15 +21,21 @@ def end_divider():
     print()
     divider()
 
-
-def helper_1():
-    print("Performing useful function#1.")
-
+# Main Menu
 
 def exit_program():
     print("Goodbye!")
     exit()
 
+def display_everything():
+    pass
+    print("Prints all the tables in the language_categories database.")
+    
+def classifications_menu():
+    pass
+
+def languages_menu():
+    pass
 
 def toggle_clear_terminal():
     global clear_terminal_on
@@ -47,12 +53,17 @@ def execute_clear_terminal():
         os.system('clear')
     print()
 
-
 """ Declare main menu commands"""
 main_menu = Menu()
 main_menu.add_command("Exit the program", exit_program)
-main_menu.add_command("Some useful function", helper_1)
+main_menu.add_command("Display entire database", display_everything)
+main_menu.add_command("Work with classifications", classifications_menu)
+main_menu.add_command("Work with languages", languages_menu)
 main_menu.add_command(
     f"Clear Terminal After Each Command: {'ON' if clear_terminal_on else 'OFF'}",
     toggle_clear_terminal,
 )
+
+# Classifications Menu
+
+
