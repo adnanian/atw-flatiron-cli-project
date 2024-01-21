@@ -21,3 +21,9 @@ class Menu:
             commands[index].callback()
         else:
             print("Invalid choice")
+            
+    def get_command_by_callback(self, callback):
+        for command in self.command_list:
+            if (callback == command.callback):
+                return command
+        return None
