@@ -87,4 +87,85 @@ class Classification:
         
     @classmethod
     def create(cls, name, geographic_locaiton):
+        """ TODO """
+        classification = cls(name, geographic_locaiton)
+        classification.save()
+        return classification
+    
+    def update(self):
+        """ TODO """
+        sql = """
+            UPDATE classifications
+            SET name = ?, geographic_location = ?
+            WHERE id = ?
+        """
+        execute_and_commit(sql, (self.name, self.geographic_location, self.id))
+        
+    def delete(self):
+        """ TODO """
+        
+        sql = """
+            DELETE FROM classifications
+            WHERE id = ?
+        """
+        
+        execute_and_commit(sql, (self.id,))
+        
+        del type(self).all[self.id]
+        self.id = None
+    
+    # Review with instructor
+    @classmethod
+    def instance_from_db(cls, row):
+        """ TODO """
+        # Check the classification for an existing instance using the row's primary key
+        classification = cls.all.get(row[0])
+        if classification:
+            # ensure attributes match row values in case local instance was modified
+            classification.name = row[1]
+            classification.geographic_locaiton = row[2]
+        else:
+            # not in classification, create new instance and add to dictionary
+            classification = cls(row[1], row[2])
+        return classification
+            
+    @classmethod
+    def get_all(cls):
+        """ TODO """
+        sql = """
+            SELECT *
+            FROM classifications
+        """
+        
+        rows = CURSOR.execute(sql).fetchall()
+        
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        """ TODO """
+        sql = """
+            SELECT *
+            FROM classifications
+            WHERE id = ?
+        """
+        
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def find_by_name(cls, name):
+        """ TODO """
+        sql = """
+            SELECT *
+            FROM classifications
+            WHERE name is ?
+        """
+        
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    def languages(self):
+        """ TODO """
         pass
+        
