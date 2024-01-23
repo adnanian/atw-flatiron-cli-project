@@ -24,6 +24,9 @@ def end_divider():
 def return_to_main_menu():
     global current_menu
     current_menu = Menu.all["main"]
+    
+def get_current_menu():
+    return current_menu
 
 # Main Menu
 

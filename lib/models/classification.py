@@ -14,11 +14,15 @@ class Classification:
     def __repr__(self):
         return f" {'{:0>2}'.format(self.id)} | {format_string_cell(self.name)} | {self.geographic_location} "
 
+    def return_as_table_row(self):
+        """ Return a representation of the Classifications object as a table row of data. (Id attribute not included.) """
+        return f" {format_string_cell(self.name)} | {self.geographic_location} "
+
     @classmethod
     def table_heading(cls):
         pass
         title = "Language Classifications"
-        header = f" id | {format_string_cell('name')} | geographic_location "
+        header = f" {format_string_cell('name')} | geographic_location "
         line = "-" * len(header)
         print(title)
         print(header)
@@ -60,6 +64,15 @@ class Classification:
         """
         execute_and_commit(sql)
         
+    @classmethod
+    def drop_table(cls):
+        """ TODO may not need to use. Will need to see. """
+        sql = """
+            DROP TABLE IF EXISTS classifications
+        """
+        
+        execute_and_commit(sql)
+        
     def save(self):
         """ TODO """
         sql = """
@@ -71,3 +84,7 @@ class Classification:
 
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
+        
+    @classmethod
+    def create(cls, name, geographic_locaiton):
+        pass

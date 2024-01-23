@@ -4,7 +4,7 @@ from menu_tools.helpers import (
     begin_divider,
     end_divider,
     execute_clear_terminal,
-    current_menu
+    get_current_menu
 )
 
 
@@ -13,16 +13,16 @@ def main():
         menu()
         choice = input("> ")
         execute_clear_terminal()
-        current_menu.execute_command(int(choice))
+        get_current_menu().execute_command(int(choice))
 
 
 def menu():
     print()
     end_divider()
     begin_divider()
-    print(current_menu.key_name)
+    print(get_current_menu().key_name)
     print("Please select an option:")
-    current_menu.display_commands()
+    get_current_menu().display_commands()
 
 
 if __name__ == "__main__":
