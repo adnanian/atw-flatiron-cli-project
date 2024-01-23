@@ -14,8 +14,12 @@ class Classification:
     def __repr__(self):
         return f" {'{:0>2}'.format(self.id)} | {format_string_cell(self.name)} | {self.geographic_location} "
 
+    def return_as_table_row_with_id(self):
+        """ Return a representation of the Classifications object as a table row of data. (Id attribute included.) """
+        return f" id | {format_string_cell(self.name)} | {self.geographic_location} "
+
     def return_as_table_row(self):
-        """ Return a representation of the Classifications object as a table row of data. (Id attribute not included.) """
+        """ Return a representation of the Classifications object as a table row of data. (Id attribute NOT included.) """
         return f" {format_string_cell(self.name)} | {self.geographic_location} "
 
     @classmethod
