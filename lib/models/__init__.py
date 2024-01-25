@@ -1,6 +1,6 @@
 import sqlite3
 
-CONN = sqlite3.connect('company.db')
+CONN = sqlite3.connect('language_categories.db')
 CURSOR = CONN.cursor()
 
 def execute_and_commit(sql, parameters =()):
