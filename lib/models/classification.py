@@ -18,17 +18,18 @@ class Classification:
         """ Return a representation of the Classifications object as a table row of data. (Id attribute included.) """
         return f" id | {format_string_cell(self.name)} | {self.geographic_location} "
 
-    def return_as_table_row(self):
+    def table_row(self):
         """ Return a representation of the Classifications object as a table row of data. (Id attribute NOT included.) """
-        return f" {format_string_cell(self.name)} | {self.geographic_location} "
+        return f" {format_string_cell(self.name)} | {format_string_cell(self.geographic_location)} "
 
     @classmethod
     def table_heading(cls):
         pass
         title = "Language Classifications"
-        header = f" {format_string_cell('name')} | geographic_location "
+        header = f" {format_string_cell('name')} | {format_string_cell('geographic_location')} "
         line = "-" * len(header)
         print(title)
+        print()
         print(header)
         print(line)
 

@@ -24,6 +24,21 @@ class Language:
         self.status = status
         self.classification_id = classification_id
 
+    def table_row(self):
+        """Return a representation of the Languages object as a table row of data. (Id attribute NOT included.)"""
+        return f" {format_string_cell(self.name)} | {format_string_cell('{:,}'.format(self.number_of_speakers))} | {format_string_cell(self.country_of_origin)} | {format_string_cell(self.status)} "
+
+    @classmethod
+    def table_heading(cls):
+        pass
+        title = "Languages"
+        header = f" {format_string_cell('name')} | {format_string_cell('number_of_speakers')} | {format_string_cell('country_of_origin')} | status "
+        line = "-" * len(header)
+        print(title)
+        print()
+        print(header)
+        print(line)
+
     @property
     def name(self):
         return self._name
@@ -57,7 +72,7 @@ class Language:
     @status.setter
     def status(self, status):
         if isinstance(status, str) and status.upper() in Language.STATUSES:
-            self._status = status
+            self._status = status.upper()
         else:
             raise ValueError(
                 "Status must be one of the listed values: ", Language.STATUSES
@@ -110,15 +125,28 @@ class Language:
             VALUES (?, ?, ?, ?, ?)
         """
 
-        execute_and_commit(sql, (self.name, self.number_of_speakers, self.country_of_origin, self.status, self.classification_id))
+        execute_and_commit(
+            sql,
+            (
+                self.name,
+                self.number_of_speakers,
+                self.country_of_origin,
+                self.status,
+                self.classification_id,
+            ),
+        )
 
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
     @classmethod
-    def create(cls, name, number_of_speakers, country_of_origin, status, classification_id):
+    def create(
+        cls, name, number_of_speakers, country_of_origin, status, classification_id
+    ):
         """TODO"""
-        language = cls(name, number_of_speakers, country_of_origin, status, classification_id)
+        language = cls(
+            name, number_of_speakers, country_of_origin, status, classification_id
+        )
         language.save()
         return language
 
@@ -129,7 +157,16 @@ class Language:
             SET name = ?, number_of_speakers = ?, country_of_origin = ?, status = ?, classification_id = ?,
             WHERE id = ?
         """
-        execute_and_commit(sql, (self.name, self.number_of_speakers, self.country_of_origin, self.status, self.classification_id))
+        execute_and_commit(
+            sql,
+            (
+                self.name,
+                self.number_of_speakers,
+                self.country_of_origin,
+                self.status,
+                self.classification_id,
+            ),
+        )
 
     def delete(self):
         """TODO"""

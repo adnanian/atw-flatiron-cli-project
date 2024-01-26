@@ -1,5 +1,7 @@
 # lib/menu_tools/helpers.py
 from menu_tools.menu import Menu
+from models.classification import Classification
+from models.language import Language
 import os
 
 clear_terminal_on = False
@@ -35,8 +37,21 @@ def exit_program():
     exit()
 
 def display_everything():
-    pass
-    print("Prints all the tables in the language_categories database.")
+    """Prints all the tables in the language_categories database."""
+    
+    # Print the classifications table
+    classifications = Classification.get_all()
+    Classification.table_heading()
+    for row in classifications:
+        print(row.table_row())
+        
+    print("\n")
+    
+    # Print the languages table
+    languages = Language.get_all()
+    Language.table_heading()
+    for row in languages:
+        print(row.table_row())
     
 def load_classifications_menu():
     global current_menu
