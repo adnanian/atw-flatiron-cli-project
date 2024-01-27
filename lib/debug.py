@@ -3,13 +3,15 @@
 
 from models.__init__ import CONN, CURSOR
 from models.classification import Classification
+from models.language import Language
 import ipdb
 
-c1 = Classification("Semitic", "Middle East", 1)
-c2 = Classification("Slavic", "Eastern Europe", 2)
+print(Classification.get_longest_attribute_length('name'))
+print(Classification.get_longest_attribute_length('geographic_location'))
 
-Classification.table_heading()
-print(c1)
-print(c2)
+print(Language.get_longest_attribute_length('name'))
+print(Language.get_longest_attribute_length('number_of_speakers'))
+print(Language.get_longest_attribute_length('country_of_origin'))
+print(Language.get_longest_attribute_length('status'))
 
 ipdb.set_trace()

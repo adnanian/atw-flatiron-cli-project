@@ -151,4 +151,20 @@ class Classification:
     def languages(self):
         """ TODO """
         pass
+    
+    @classmethod
+    def get_longest_attribute_length(cls, attribute_name):
+        """ TODO """
+        if attribute_name in ("name", "geographic_location"):
+            sql = f"""
+                SELECT length({attribute_name})
+                FROM classifications
+                ORDER BY length({attribute_name}) DESC
+                LIMIT 1;
+            """
+            row = CURSOR.execute(sql).fetchone()
+            return row
+        else:
+            raise ValueError("Attribute name must be a valid table column.")
+       
         

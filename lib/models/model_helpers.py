@@ -12,6 +12,7 @@ def validate_attribute_text(var, attribute_name):
 
     if not (var_is_string and attr_is_string):
         raise ValueError(f"'{attribute_name.title()}' must be a non-empty string.")
+
 """
 def format_string_cell(var):
     if not is_non_empty_string:
