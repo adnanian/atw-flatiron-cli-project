@@ -6,12 +6,12 @@ from models.classification import Classification
 from models.language import Language
 import ipdb
 
-print(Classification.get_longest_attribute_length('name'))
-print(Classification.get_longest_attribute_length('geographic_location'))
+a = Classification.get_longest_attribute_length('name')
+b = Classification.get_longest_attribute_length('geographic_location')
 
-print(Language.get_longest_attribute_length('name'))
-print(Language.get_longest_attribute_length('number_of_speakers'))
-print(Language.get_longest_attribute_length('country_of_origin'))
-print(Language.get_longest_attribute_length('status'))
+c = Language.get_longest_attribute_length('name')
+d = Language.get_longest_attribute_length('number_of_speakers')
+e = Language.get_longest_attribute_length('country_of_origin')
+f = Language.get_longest_attribute_length('status')
 
 ipdb.set_trace()

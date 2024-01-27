@@ -31,7 +31,7 @@ def return_to_main_menu():
 def get_current_menu():
     return current_menu
 
-def format_string_cell(var, char_limit):
+def format_string_cell_left(var, char_limit):
     if not is_non_empty_string:
         var = str(var)
     if ((length := len(var)) > char_limit):
@@ -40,7 +40,7 @@ def format_string_cell(var, char_limit):
     spaces = ' ' * space_size
     return var + spaces
 
-def format_string_cell_2(var, char_limit):
+def format_string_cell_center(var, char_limit):
     if not is_non_empty_string:
         var = str(var)
     if ((length := len(var)) <= char_limit):
@@ -59,21 +59,33 @@ def format_string_cell_2(var, char_limit):
         return left_spaces + var + right_spaces
     else:
         raise ValueError(f"String must be {char_limit} characters or less.")
-
-def table_row(values):
-    if type(values) is tuple:
-        row = ""
-        for index in range(length := len(values)):
-            formatted_column = format_string_cell_2(values[index], CELL_CHAR_LIMIT)
-            divider = "|" if (index < length - 1) else ""
-            column = f" {formatted_column} {divider}"
-            row += column
-        return row
-    else:
-        raise TypeError("Values in the table must be passed as a tuple.")
     
-def table_header(title, values):
-    row = table_row(values)
+def format_string_cell_right(var, char_limit):
+    if not is_non_empty_string:
+        var = str(var)
+    if ((length := len(var)) > char_limit):
+        var = var[0:(char_limit - 3)] + "..."
+    space_size = char_limit - length
+    spaces = ' ' * space_size
+    return spaces + var
+
+def table_row(values, column_lengths):
+    if (len(values) == len(column_lengths)):
+        if type(values) is tuple:
+            row = ""
+            for index in range(length := len(values)):
+                formatted_column = format_string_cell_right(values[index], column_lengths[index])
+                divider = "|" if (index < length - 1) else ""
+                column = f" {formatted_column} {divider}"
+                row += column
+            return row
+        else:
+            raise TypeError("Values in the table must be passed as a tuple.")
+    else:
+        raise ValueError("Values and column lengths must be the same size")
+    
+def table_header(title, values, column_lengths):
+    row = table_row(values, column_lengths)
     return f"{title}\n\n{row}\n{('-' * len(row))}"
     
 
@@ -133,12 +145,14 @@ main_menu.add_command(
 
 def print_classifications_as_table():
     classifications = Classification.get_all()
-    print(table_header("Language Classifications", ("name", "geographic_location")))
+    header_names = ("name", "geographic_location")
+    column_lengths = [max(len(header), int(Classification.get_longest_attribute_length(header)[0])) for header in header_names]
+    print(table_header("Language Classifications", header_names, column_lengths))
     for classification in classifications:
         name = classification.name
         location = classification.geographic_location
         cells = (name, location)
-        print(table_row(cells))
+        print(table_row(cells, column_lengths))
     print()
 
 
@@ -152,14 +166,16 @@ classifications_menu.add_command("Work with languages", load_languages_menu)
 
 def print_languages_as_table():
     languages = Language.get_all()
-    print(table_header("Languages", ("name", "number_of_speakers", "country_of_origin", "status")))
+    header_names = ("name", "number_of_speakers", "country_of_origin", "status")
+    column_lengths = [max(len(header), int(Language.get_longest_attribute_length(header)[0])) for header in header_names]
+    print(table_header("Languages", header_names, column_lengths))
     for language in languages:
         name = language.name
         speakers = '{:,}'.format(language.number_of_speakers)
         country = language.country_of_origin
         status = language.status
         cells = (name, speakers, country, status)
-        print(table_row(cells))
+        print(table_row(cells, column_lengths))
     print()
 
 languages_menu = Menu("languages")
