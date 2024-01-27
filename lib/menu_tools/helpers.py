@@ -2,21 +2,22 @@
 from menu_tools.menu import Menu
 from models.classification import Classification
 from models.language import Language
+from models.model_helpers import (is_non_empty_string)
 import os
 
 clear_terminal_on = False
+CELL_CHAR_LIMIT = 30
 
+# For all menus
 
 def divider():
     """Prints 100 asterisks to the terminal."""
     print("*" * 100)
 
-
 def begin_divider():
     """Prints a line of asterisks using the divider() function; then breaks another line."""
     divider()
     print()
-
 
 def end_divider():
     """Breaks a line; then prints another line of asterisks using the divider() function"""
@@ -30,6 +31,52 @@ def return_to_main_menu():
 def get_current_menu():
     return current_menu
 
+def format_string_cell(var, char_limit):
+    if not is_non_empty_string:
+        var = str(var)
+    if ((length := len(var)) > char_limit):
+        var = var[0:(char_limit - 3)] + "..."
+    space_size = char_limit - length
+    spaces = ' ' * space_size
+    return var + spaces
+
+def format_string_cell_2(var, char_limit):
+    if not is_non_empty_string:
+        var = str(var)
+    if ((length := len(var)) <= char_limit):
+        pass
+        total_spaces = char_limit - length
+        var_index = int(total_spaces / 2)
+        left_spaces = ' ' * var_index
+        right_spaces = ' ' * (total_spaces - var_index)
+        
+        #print(f"Length of name: {length}")
+        #print(f"Total spaces: {total_spaces}")
+        #print(f"Var Index: {var_index}")
+        #print(f"Left Spaces: {left_spaces}")
+        #print(f"Right Spaces: {right_spaces}")   
+        
+        return left_spaces + var + right_spaces
+    else:
+        raise ValueError(f"String must be {char_limit} characters or less.")
+
+def table_row(values):
+    if type(values) is tuple:
+        row = ""
+        for index in range(length := len(values)):
+            formatted_column = format_string_cell_2(values[index], CELL_CHAR_LIMIT)
+            divider = "|" if (index < length - 1) else ""
+            column = f" {formatted_column} {divider}"
+            row += column
+        return row
+    else:
+        raise TypeError("Values in the table must be passed as a tuple.")
+    
+def table_header(title, values):
+    row = table_row(values)
+    return f"{title}\n\n{row}\n{('-' * len(row))}"
+    
+
 # Main Menu
 
 def exit_program():
@@ -40,18 +87,10 @@ def display_everything():
     """Prints all the tables in the language_categories database."""
     
     # Print the classifications table
-    classifications = Classification.get_all()
-    Classification.table_heading()
-    for row in classifications:
-        print(row.table_row())
-        
-    print("\n")
+    print_classifications_as_table()
     
     # Print the languages table
-    languages = Language.get_all()
-    Language.table_heading()
-    for row in languages:
-        print(row.table_row())
+    print_languages_as_table()
     
 def load_classifications_menu():
     global current_menu
@@ -91,12 +130,38 @@ main_menu.add_command(
 )
 
 # Classifications Menu
+
+def print_classifications_as_table():
+    classifications = Classification.get_all()
+    print(table_header("Language Classifications", ("name", "geographic_location")))
+    for classification in classifications:
+        name = classification.name
+        location = classification.geographic_location
+        cells = (name, location)
+        print(table_row(cells))
+    print()
+
+
+""" Declare classifications commands"""
 classifications_menu = Menu("classifications")
 classifications_menu.add_command("Exit the program", exit_program)
 classifications_menu.add_command("Return to main menu", return_to_main_menu)
 classifications_menu.add_command("Work with languages", load_languages_menu)
 
 # Languages Menu
+
+def print_languages_as_table():
+    languages = Language.get_all()
+    print(table_header("Languages", ("name", "number_of_speakers", "country_of_origin", "status")))
+    for language in languages:
+        name = language.name
+        speakers = '{:,}'.format(language.number_of_speakers)
+        country = language.country_of_origin
+        status = language.status
+        cells = (name, speakers, country, status)
+        print(table_row(cells))
+    print()
+
 languages_menu = Menu("languages")
 languages_menu.add_command("Exit the program", exit_program)
 languages_menu.add_command("Return to main menu", return_to_main_menu)

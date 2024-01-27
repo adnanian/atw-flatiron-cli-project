@@ -1,6 +1,6 @@
 # lib/models/classification.py
 from models.__init__ import (CURSOR, execute_and_commit)
-from models.model_helpers import (validate_attribute_text, format_string_cell)
+from models.model_helpers import (validate_attribute_text)
 
 
 class Classification:
@@ -10,28 +10,6 @@ class Classification:
         self.id = id
         self.name = name
         self.geographic_location = geographic_locaiton
-
-    def __repr__(self):
-        return f" {'{:0>2}'.format(self.id)} | {format_string_cell(self.name)} | {self.geographic_location} "
-
-    def return_as_table_row_with_id(self):
-        """ Return a representation of the Classifications object as a table row of data. (Id attribute included.) """
-        return f" id | {format_string_cell(self.name)} | {self.geographic_location} "
-
-    def table_row(self):
-        """ Return a representation of the Classifications object as a table row of data. (Id attribute NOT included.) """
-        return f" {format_string_cell(self.name)} | {format_string_cell(self.geographic_location)} "
-
-    @classmethod
-    def table_heading(cls):
-        pass
-        title = "Language Classifications"
-        header = f" {format_string_cell('name')} | {format_string_cell('geographic_location')} "
-        line = "-" * len(header)
-        print(title)
-        print()
-        print(header)
-        print(line)
 
     @property
     def name(self):

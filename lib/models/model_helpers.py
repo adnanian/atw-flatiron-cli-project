@@ -34,11 +34,3 @@ def format_string_cell(var):
         raise ValueError("String must be 24 characters or less.")
 """
     
-def format_string_cell(var):
-    if not is_non_empty_string:
-        var = str(var)
-    if ((length := len(var)) > NAME_COL_LIMIT):
-        var = var[0:(NAME_COL_LIMIT - 3)] + "..."
-    space_size = NAME_COL_LIMIT - length
-    spaces = ' ' * space_size
-    return var + spaces

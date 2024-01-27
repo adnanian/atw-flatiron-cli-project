@@ -1,5 +1,5 @@
 from models.__init__ import CURSOR, execute_and_commit
-from models.model_helpers import validate_attribute_text, format_string_cell
+from models.model_helpers import validate_attribute_text
 from models.classification import Classification
 
 
@@ -24,20 +24,6 @@ class Language:
         self.status = status
         self.classification_id = classification_id
 
-    def table_row(self):
-        """Return a representation of the Languages object as a table row of data. (Id attribute NOT included.)"""
-        return f" {format_string_cell(self.name)} | {format_string_cell('{:,}'.format(self.number_of_speakers))} | {format_string_cell(self.country_of_origin)} | {format_string_cell(self.status)} "
-
-    @classmethod
-    def table_heading(cls):
-        pass
-        title = "Languages"
-        header = f" {format_string_cell('name')} | {format_string_cell('number_of_speakers')} | {format_string_cell('country_of_origin')} | status "
-        line = "-" * len(header)
-        print(title)
-        print()
-        print(header)
-        print(line)
 
     @property
     def name(self):
