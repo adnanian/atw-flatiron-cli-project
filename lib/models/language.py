@@ -85,7 +85,7 @@ class Language:
         sql = """
             CREATE TABLE languages(
                 id INTEGER PRIMARY KEY,
-                name VARCHAR(50),
+                name VARCHAR(50) UNIQUE,
                 number_of_speakers UNSIGNED INT,
                 country_of_origin VARCHAR(50),
                 status TEXT,

@@ -159,6 +159,9 @@ def print_classifications_as_table():
         cells = (name, location)
         print(table_row(cells, column_lengths))
     print()
+    
+def create_classification():
+    pass
 
 
 """ Declare classifications commands"""

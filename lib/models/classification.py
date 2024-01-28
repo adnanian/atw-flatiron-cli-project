@@ -41,7 +41,7 @@ class Classification:
         sql = """
             CREATE TABLE classifications(
                 id INTEGER PRIMARY KEY,
-                name VARCHAR(24),
+                name VARCHAR(24) UNIQUE,
                 geographic_location TEXT
             );
         """
