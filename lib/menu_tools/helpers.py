@@ -8,6 +8,13 @@ import os
 clear_terminal_on = False
 CELL_CHAR_LIMIT = 30
 
+# Universal prompts
+EXIT_PROMPT = "Exit the program"
+TOGGLE_CLEAR_TERMINAL_PROMPT = f"Clear Terminal After Each Command: {'ON' if clear_terminal_on else 'OFF'}"
+MAIN_MENU_PROMPT = "Return to main menu"
+CLASSIFICATIONS_PROMPT = "Work with classifications"
+LANGUAGES_PROMPT = "Work with languages"
+
 # For all menus
 
 def divider():
@@ -132,14 +139,12 @@ def execute_clear_terminal():
 
 """ Declare main menu commands"""
 main_menu = Menu("main")
-main_menu.add_command("Exit the program", exit_program)
+main_menu.add_command(EXIT_PROMPT, exit_program)
+main_menu.add_command(TOGGLE_CLEAR_TERMINAL_PROMPT, toggle_clear_terminal)
 main_menu.add_command("Display entire database", display_everything)
-main_menu.add_command("Work with classifications", load_classifications_menu)
-main_menu.add_command("Work with languages", load_languages_menu)
-main_menu.add_command(
-    f"Clear Terminal After Each Command: {'ON' if clear_terminal_on else 'OFF'}",
-    toggle_clear_terminal,
-)
+main_menu.add_command(CLASSIFICATIONS_PROMPT, load_classifications_menu)
+main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
+
 
 # Classifications Menu
 
@@ -158,9 +163,11 @@ def print_classifications_as_table():
 
 """ Declare classifications commands"""
 classifications_menu = Menu("classifications")
-classifications_menu.add_command("Exit the program", exit_program)
-classifications_menu.add_command("Return to main menu", return_to_main_menu)
-classifications_menu.add_command("Work with languages", load_languages_menu)
+classifications_menu.add_command(EXIT_PROMPT, exit_program)
+classifications_menu.add_command(MAIN_MENU_PROMPT, return_to_main_menu)
+classifications_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
+classifications_menu.add_command("Display classifications table", print_classifications_as_table)
+
 
 # Languages Menu
 
@@ -180,9 +187,10 @@ def print_languages_as_table():
     print()
 
 languages_menu = Menu("languages")
-languages_menu.add_command("Exit the program", exit_program)
-languages_menu.add_command("Return to main menu", return_to_main_menu)
-languages_menu.add_command("Work with classifications", load_languages_menu)
+languages_menu.add_command(EXIT_PROMPT, exit_program)
+languages_menu.add_command(MAIN_MENU_PROMPT, return_to_main_menu)
+languages_menu.add_command(CLASSIFICATIONS_PROMPT, load_classifications_menu)
+languages_menu.add_command("Display languages table", print_languages_as_table)
 
 # Set current menu to "main"
 current_menu = Menu.all["main"]
