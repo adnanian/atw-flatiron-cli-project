@@ -231,6 +231,7 @@ classifications_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 classifications_menu.add_command(
     "Display classifications table", print_classifications_as_table
 )
+classifications_menu.add_command("Create classification", create_classification)
 
 
 # Languages Menu
