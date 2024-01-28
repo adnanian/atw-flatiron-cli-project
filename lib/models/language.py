@@ -119,7 +119,7 @@ class Language:
                 self.country_of_origin,
                 self.status,
                 self.classification_id,
-            ),
+            )
         )
 
         self.id = CURSOR.lastrowid
@@ -140,7 +140,7 @@ class Language:
         """TODO"""
         sql = """
             UPDATE languages
-            SET name = ?, number_of_speakers = ?, country_of_origin = ?, status = ?, classification_id = ?,
+            SET name = ?, number_of_speakers = ?, country_of_origin = ?, status = ?, classification_id = ?
             WHERE id = ?
         """
         execute_and_commit(
@@ -151,7 +151,8 @@ class Language:
                 self.country_of_origin,
                 self.status,
                 self.classification_id,
-            ),
+                self.id
+            )
         )
 
     def delete(self):

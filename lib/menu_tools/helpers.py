@@ -90,6 +90,7 @@ main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 
 # Classifications Menu
 
+
 def non_id_classification_column_names():
     """TODO"""
     column_names = [column[1] for column in Classification.get_column_names()]
@@ -133,7 +134,6 @@ def print_classifications_as_table():
 
 def create_classification():
     """TODO"""
-    pass
     name = input("Enter the classification name: ")
     geographic_location = input("Enter the classification's geographic location: ")
     try:
@@ -167,26 +167,28 @@ def update_classification():
             classification.update()
             display_classifications(
                 "\nClassification successfully updated",
-                [Classification.find_by_name(new_name)]
+                [Classification.find_by_name(new_name)],
             )
         except Exception as exc:
             print("Classification update failed:", exc)
     else:
         print(f"Classification with name, '{name}', not found.")
-        
+
+
 def delete_classification():
     name = input("Enter the name of the classification to delete: ")
-    if (clasification := Classification.find_by_name(name)):
+    if clasification := Classification.find_by_name(name):
         clasification.delete()
         print(f"Classification with name, '{name}' deleted!")
     else:
         print(f"Classification with name, '{name}' not found!")
-        
+
+
 def list_languages_in_classification():
     name = input("Enter the classification name: ")
-    if (classification := Classification.find_by_name(name)):
+    if classification := Classification.find_by_name(name):
         display_languages(classification.languages())
-        
+
 
 """ Declare classifications commands"""
 classifications_menu = Menu("classifications")
@@ -199,6 +201,10 @@ classifications_menu.add_command(
 classifications_menu.add_command("Create classification", create_classification)
 classifications_menu.add_command("Update classification", update_classification)
 classifications_menu.add_command("Delete classification", delete_classification)
+classifications_menu.add_command(
+    "List a classification's languages", list_languages_in_classification
+)
+
 
 # Languages Menu
 def non_id_language_column_names():
@@ -241,6 +247,108 @@ def display_languages(title, language_rows):
     print()
 
 
+def create_language():
+    """TODO"""
+    name = input("Enter the language name: ")
+    speakers = int(
+        input(
+            "\nEnter the number of speakers for that language.\n"
+            + "Do not use commas: "
+        )
+    )
+    country = input("\nEnter the country the language originates from: ")
+    status = input(
+        "\nEnter the language's current existence status:\n\n"
+        + "LIVING - language is alive today and currently in use by millions of people\n"
+        + "ENDANGERED - language which has a very few number of native speakers and at risk of going extinct\n"
+        + "DEAD - language that has no native speakers, but is spoken as a second language in some areas\n"
+        + "EXTINCT - language that is no longer extinct and no longer possible to revive\n\n"
+        + "Status: "
+    )
+    classification_name = input("Enter the classification name: ").title()
+    classification_id = Classification.find_by_name(classification_name).id
+    try:
+        language = Language.create(name, speakers, country, status, classification_id)
+        display_languages("Language successfully created", [language])
+    except Exception as exc:
+        print("Language creation failed: ", exc)
+
+
+def update_language():
+    name = input("Enter the name of the language you would like to update: ")
+    if language := Language.find_by_name(name):
+        try:
+            # New name
+            new_name = input(
+                "\nEnter the language's new name.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_name = new_name if new_name else language.name
+            print(new_name)
+
+            # New speaker count
+            new_speaker_count = input(
+                "\nEnter the language's new speaker count (No commas).\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_speaker_count = (
+                int(new_speaker_count) if new_speaker_count else language.number_of_speakers
+            )
+            print(new_speaker_count)
+
+            # New country
+            new_country = input(
+                "\nEnter the language's new country of origin.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_country = new_country if new_country else language.country_of_origin
+            print(new_country)
+
+            # New status
+            new_status = input(
+                "\nEnter the language's new status.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_status = new_status if new_status else language.status
+            print(new_status)
+
+            # New classification id
+            new_classification_name = input(
+                "\nEnter the language's new classification name.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            print(new_classification_name)
+            new_classification_id = (
+                Classification.find_by_name(new_classification_name).id
+                if new_classification_name
+                else language.classification_id
+            )
+            #print(new_classification_id)
+
+            # Update
+            language.name = new_name
+            language.number_of_speakers = new_speaker_count
+            language.country_of_origin = new_country
+            language.status = new_status
+            language.classification_id = new_classification_id
+            language.update()
+            display_languages(
+                "\nLanguage successfully updated", [Language.find_by_name(new_name)]
+            )
+        except Exception as exc:
+            print("Language update failed:", exc)
+    else:
+        print(f"Language with name, '{name}', not found.")
+
+
+def delete_language():
+    name = input("Enter the name of the language to delete: ")
+    if language := Language.find_by_name(name):
+        language.delete()
+        print(f"Language with name, '{name}' deleted!")
+    else:
+        print(f"Language with name, '{name}' not found!")
+
 
 def print_languages_as_table():
     display_languages("Languages", Language.get_all())
@@ -251,6 +359,9 @@ languages_menu.add_command(EXIT_PROMPT, exit_program)
 languages_menu.add_command(MAIN_MENU_PROMPT, return_to_main_menu)
 languages_menu.add_command(CLASSIFICATIONS_PROMPT, load_classifications_menu)
 languages_menu.add_command("Display languages table", print_languages_as_table)
+languages_menu.add_command("Create language", create_language)
+languages_menu.add_command("Update language", update_language)
+languages_menu.add_command("Delete language", delete_language)
 
 # Set current menu to "main"
 current_menu = Menu.all["main"]
