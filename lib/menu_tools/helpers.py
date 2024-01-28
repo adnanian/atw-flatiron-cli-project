@@ -90,7 +90,6 @@ main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 
 # Classifications Menu
 
-
 def non_id_classification_column_names():
     """TODO"""
     column_names = [column[1] for column in Classification.get_column_names()]
@@ -174,7 +173,20 @@ def update_classification():
             print("Classification update failed:", exc)
     else:
         print(f"Classification with name, '{name}', not found.")
-
+        
+def delete_classification():
+    name = input("Enter the name of the classification to delete: ")
+    if (clasification := Classification.find_by_name(name)):
+        clasification.delete()
+        print(f"Classification with name, '{name}' deleted!")
+    else:
+        print(f"Classification with name, '{name}' not found!")
+        
+def list_languages_in_classification():
+    name = input("Enter the classification name: ")
+    if (classification := Classification.find_by_name(name)):
+        display_languages(classification.languages())
+        
 
 """ Declare classifications commands"""
 classifications_menu = Menu("classifications")
@@ -186,26 +198,28 @@ classifications_menu.add_command(
 )
 classifications_menu.add_command("Create classification", create_classification)
 classifications_menu.add_command("Update classification", update_classification)
-
+classifications_menu.add_command("Delete classification", delete_classification)
 
 # Languages Menu
+def non_id_language_column_names():
+    """TODO"""
+    column_names = [column[1] for column in Language.get_column_names()]
+    column_names[-1] = "classification"
+    column_names = tuple(column_names[1 : len(column_names)])
+    return column_names
 
 
-def print_languages_as_table():
-    languages = Language.get_all()
-    header_names = (
-        "name",
-        "number_of_speakers",
-        "country_of_origin",
-        "status",
-        "classification",
-    )
-    column_lengths = [
+def get_language_column_lengths(header_names):
+    """TODO"""
+    return [
         max(len(header), int(Language.get_longest_attribute_length(header)[0]))
         for header in header_names
     ]
-    print(table_header("Languages", header_names, column_lengths))
-    for language in languages:
+
+
+def print_language_table_row(language, column_lengths):
+    """TODO"""
+    if isinstance(language, Language):
         name = language.name
         speakers = "{:,}".format(language.number_of_speakers)
         country = language.country_of_origin
@@ -213,7 +227,23 @@ def print_languages_as_table():
         classification_name = Classification.find_by_id(language.classification_id).name
         cells = (name, speakers, country, status, classification_name)
         print(table_row(cells, column_lengths))
+    else:
+        raise TypeError("First argument must be a language.")
+
+
+def display_languages(title, language_rows):
+    """Displays a given set of rows from the languages table in a cli table format."""
+    header_names = non_id_language_column_names()
+    column_lengths = get_language_column_lengths(header_names)
+    print(table_header(title, header_names, column_lengths))
+    for language in language_rows:
+        print_language_table_row(language, column_lengths)
     print()
+
+
+
+def print_languages_as_table():
+    display_languages("Languages", Language.get_all())
 
 
 languages_menu = Menu("languages")

@@ -155,7 +155,17 @@ class Classification:
     
     def languages(self):
         """ TODO """
-        pass
+        from models.language import Language
+        sql = """
+            SELECT *
+            FROM languages
+            WHERE classification_id = ?
+        """
+        CURSOR.execute(sql, (self.id,)).fetchone()
+        rows = CURSOR.fetchall()
+        return [
+            Language.instance_from_db(row) for row in rows
+        ]
     
     @classmethod
     def get_longest_attribute_length(cls, attribute_name):

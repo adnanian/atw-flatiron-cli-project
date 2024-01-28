@@ -249,3 +249,12 @@ class Language:
             return row
         else:
             raise ValueError("Attribute name must be a valid table column.")
+
+    @classmethod
+    def get_column_names(cls):
+        """ TODO """
+        sql = """
+            PRAGMA table_info(languages)
+        """
+        columns = CURSOR.execute(sql).fetchall()
+        return columns
