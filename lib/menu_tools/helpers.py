@@ -166,7 +166,7 @@ classifications_menu.add_command("Work with languages", load_languages_menu)
 
 def print_languages_as_table():
     languages = Language.get_all()
-    header_names = ("name", "number_of_speakers", "country_of_origin", "status")
+    header_names = ("name", "number_of_speakers", "country_of_origin", "status", "classification")
     column_lengths = [max(len(header), int(Language.get_longest_attribute_length(header)[0])) for header in header_names]
     print(table_header("Languages", header_names, column_lengths))
     for language in languages:
@@ -174,7 +174,8 @@ def print_languages_as_table():
         speakers = '{:,}'.format(language.number_of_speakers)
         country = language.country_of_origin
         status = language.status
-        cells = (name, speakers, country, status)
+        classification_name = Classification.find_by_id(language.classification_id).name
+        cells = (name, speakers, country, status, classification_name)
         print(table_row(cells, column_lengths))
     print()
 

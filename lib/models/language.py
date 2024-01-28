@@ -224,7 +224,7 @@ class Language:
     @classmethod
     def get_longest_attribute_length(cls, attribute_name):
         """ TODO """
-        if attribute_name in (column_names := ("name", "number_of_speakers", "country_of_origin", "status")):
+        if attribute_name in (column_names := ("name", "number_of_speakers", "country_of_origin", "status", "classification")):
             sql = ""
             if (attribute_name == column_names[1]):
                 sql = """
@@ -233,6 +233,8 @@ class Language:
                     ORDER BY number_of_speakers DESC
                     LIMIT 1;
                 """
+            elif (attribute_name == column_names[-1]):
+                return Classification.get_longest_attribute_length("name")
             else:
                 sql = f"""
                     SELECT length({attribute_name})
