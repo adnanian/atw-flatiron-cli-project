@@ -148,7 +148,11 @@ main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 
 # Classifications Menu
 
+def get_classification_column_lengths():
+    pass
+
 def print_classifications_as_table():
+    """ TODO """
     classifications = Classification.get_all()
     header_names = ("name", "geographic_location")
     column_lengths = [max(len(header), int(Classification.get_longest_attribute_length(header)[0])) for header in header_names]
@@ -161,7 +165,16 @@ def print_classifications_as_table():
     print()
     
 def create_classification():
+    """ TODO """
     pass
+    name = input("Enter the classification name: ")
+    geographic_location = input("Enter the classification's geographic location: ")
+    try:
+        pass
+        classification = Classification.create(name, geographic_location)
+        print("Classification successfully created")
+    except Exception as exc:
+        pass
 
 
 """ Declare classifications commands"""
