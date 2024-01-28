@@ -14,4 +14,6 @@ d = Language.get_longest_attribute_length('number_of_speakers')
 e = Language.get_longest_attribute_length('country_of_origin')
 f = Language.get_longest_attribute_length('status')
 
+classification_columns = Classification.get_column_names()
+
 ipdb.set_trace()
