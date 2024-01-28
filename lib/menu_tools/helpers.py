@@ -1,8 +1,8 @@
 # lib/menu_tools/helpers.py
 from menu_tools.menu import Menu
+from menu_tools.formatting import *
 from models.classification import Classification
 from models.language import Language
-from models.model_helpers import is_non_empty_string
 import os
 
 # Constants
@@ -22,23 +22,6 @@ LANGUAGES_PROMPT = "Work with languages"
 # For all menus
 
 
-def divider():
-    """Prints 100 asterisks to the terminal."""
-    print("*" * 100)
-
-
-def begin_divider():
-    """Prints a line of asterisks using the divider() function; then breaks another line."""
-    divider()
-    print()
-
-
-def end_divider():
-    """Breaks a line; then prints another line of asterisks using the divider() function"""
-    print()
-    divider()
-
-
 def return_to_main_menu():
     global current_menu
     current_menu = Menu.all["main"]
@@ -48,84 +31,19 @@ def get_current_menu():
     return current_menu
 
 
-def format_string_cell_left(var, char_limit):
-    if not is_non_empty_string:
-        var = str(var)
-    if (length := len(var)) > char_limit:
-        var = var[0 : (char_limit - 3)] + "..."
-    space_size = char_limit - length
-    spaces = " " * space_size
-    return var + spaces
-
-
-def format_string_cell_center(var, char_limit):
-    if not is_non_empty_string:
-        var = str(var)
-    if (length := len(var)) <= char_limit:
-        pass
-        total_spaces = char_limit - length
-        var_index = int(total_spaces / 2)
-        left_spaces = " " * var_index
-        right_spaces = " " * (total_spaces - var_index)
-
-        # print(f"Length of name: {length}")
-        # print(f"Total spaces: {total_spaces}")
-        # print(f"Var Index: {var_index}")
-        # print(f"Left Spaces: {left_spaces}")
-        # print(f"Right Spaces: {right_spaces}")
-
-        return left_spaces + var + right_spaces
-    else:
-        raise ValueError(f"String must be {char_limit} characters or less.")
-
-
-def format_string_cell_right(var, char_limit):
-    if not is_non_empty_string:
-        var = str(var)
-    if (length := len(var)) > char_limit:
-        var = var[0 : (char_limit - 3)] + "..."
-    space_size = char_limit - length
-    spaces = " " * space_size
-    return spaces + var
-
-
-def table_row(values, column_lengths):
-    if len(values) == len(column_lengths):
-        if type(values) is tuple:
-            row = ""
-            for index in range(length := len(values)):
-                formatted_column = format_string_cell_right(
-                    values[index], column_lengths[index]
-                )
-                divider = "|" if (index < length - 1) else ""
-                column = f" {formatted_column} {divider}"
-                row += column
-            return row
-        else:
-            raise TypeError("Values in the table must be passed as a tuple.")
-    else:
-        raise ValueError("Values and column lengths must be the same size")
-
-
-def table_header(title, values, column_lengths):
-    row = table_row(values, column_lengths)
-    return f"{title}\n\n{row}\n{('-' * len(row))}"
-
-
 # Main Menu
 
 
 def exit_program():
+    """TODO"""
     print("Goodbye!")
     exit()
 
 
 def display_everything():
     """Prints all the tables in the language_categories database."""
-
     # Print the classifications table
     print_classifications_as_table()
-
     # Print the languages table
     print_languages_as_table()
 
@@ -174,22 +92,23 @@ main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 
 
 def non_id_classification_column_names():
-    """ TODO """
+    """TODO"""
     column_names = [column[1] for column in Classification.get_column_names()]
     column_names = tuple(column_names[1 : len(column_names)])
     return column_names
 
 
 def get_classification_column_lengths(header_names):
-    """ TODO """
+    """TODO"""
     return [
         max(len(header), int(Classification.get_longest_attribute_length(header)[0]))
         for header in header_names
     ]
-    
+
+
 def print_classification_table_row(classification, column_lengths):
-    """ TODO """
-    if (isinstance(classification, Classification)):
+    """TODO"""
+    if isinstance(classification, Classification):
         name = classification.name
         location = classification.geographic_location
         cells = (name, location)
@@ -197,15 +116,20 @@ def print_classification_table_row(classification, column_lengths):
     else:
         raise TypeError("First argument must be a classification.")
 
-def print_classifications_as_table():
-    """TODO"""
-    classifications = Classification.get_all()
+
+def display_classifications(title, classification_rows):
+    """Displays a given set of rows from the classifications table in a cli table format."""
     header_names = non_id_classification_column_names()
     column_lengths = get_classification_column_lengths(header_names)
-    print(table_header("Language Classifications", header_names, column_lengths))
-    for classification in classifications:
+    print(table_header(title, header_names, column_lengths))
+    for classification in classification_rows:
         print_classification_table_row(classification, column_lengths)
     print()
+
+
+def print_classifications_as_table():
+    """TODO"""
+    display_classifications("Language Classifications", Classification.get_all())
 
 
 def create_classification():
@@ -215,12 +139,41 @@ def create_classification():
     geographic_location = input("Enter the classification's geographic location: ")
     try:
         classification = Classification.create(name, geographic_location)
-        header_names = non_id_classification_column_names()
-        column_lengths = get_classification_column_lengths(header_names)
-        print(table_header("Classification successfully created!", header_names, column_lengths))
-        print_classification_table_row(classification, column_lengths)
+        display_classifications("Classification successfully created", [classification])
     except Exception as exc:
         print("Classification creation failed: ", exc)
+
+
+def update_classification():
+    name = input("Enter the name of the classification you would like to update: ")
+    if classification := Classification.find_by_name(name):
+        try:
+            new_name = input(
+                "\nEnter the classification's new name.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_name = new_name if new_name else classification.name
+            print(new_name)
+            new_location = input(
+                "\nEnter the classification's new geographic location.\n"
+                + "If you wish to keep the current value, simply press ENTER: "
+            )
+            new_location = (
+                new_location if new_location else classification.geographic_location
+            )
+            print(new_location)
+            # Update
+            classification.name = new_name
+            classification.geographic_location = new_location
+            classification.update()
+            display_classifications(
+                "\nClassification successfully updated",
+                [Classification.find_by_name(new_name)]
+            )
+        except Exception as exc:
+            print("Classification update failed:", exc)
+    else:
+        print(f"Classification with name, '{name}', not found.")
 
 
 """ Declare classifications commands"""
@@ -232,6 +185,7 @@ classifications_menu.add_command(
     "Display classifications table", print_classifications_as_table
 )
 classifications_menu.add_command("Create classification", create_classification)
+classifications_menu.add_command("Update classification", update_classification)
 
 
 # Languages Menu

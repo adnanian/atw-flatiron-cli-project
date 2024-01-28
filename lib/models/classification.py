@@ -10,6 +10,9 @@ class Classification:
         self.id = id
         self.name = name
         self.geographic_location = geographic_locaiton
+        
+    def __repr__(self):
+        return str(self.__dict__)
 
     @property
     def name(self):
@@ -110,6 +113,8 @@ class Classification:
         else:
             # not in classification, create new instance and add to dictionary
             classification = cls(row[1], row[2])
+            classification.id = row[0]
+            cls.all[classification.id] = classification
         return classification
             
     @classmethod

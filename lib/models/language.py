@@ -183,6 +183,8 @@ class Language:
         else:
             # not in language, create new instance and add to dictionary
             language = cls(row[1], row[2], row[3], row[4], row[5])
+            language.id = row[0]
+            cls.all[language.id] = language
         return language
 
     @classmethod

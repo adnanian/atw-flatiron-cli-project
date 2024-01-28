@@ -6,14 +6,6 @@ from models.classification import Classification
 from models.language import Language
 import ipdb
 
-a = Classification.get_longest_attribute_length('name')
-b = Classification.get_longest_attribute_length('geographic_location')
-
-c = Language.get_longest_attribute_length('name')
-d = Language.get_longest_attribute_length('number_of_speakers')
-e = Language.get_longest_attribute_length('country_of_origin')
-f = Language.get_longest_attribute_length('status')
-
-classification_columns = Classification.get_column_names()
+classification = Classification.find_by_id(5)
 
 ipdb.set_trace()
