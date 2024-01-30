@@ -161,7 +161,7 @@ class Classification:
             FROM languages
             WHERE classification_id = ?
         """
-        CURSOR.execute(sql, (self.id,)).fetchone()
+        CURSOR.execute(sql, (self.id,),)
         rows = CURSOR.fetchall()
         return [
             Language.instance_from_db(row) for row in rows
@@ -191,4 +191,12 @@ class Classification:
         columns = CURSOR.execute(sql).fetchall()
         return columns
        
+    @classmethod
+    def row_count(cls):
+        """ TODO """
+        sql = """
+            SELECT COUNT(*) FROM classifications
+        """
+        row_count = CURSOR.execute(sql).fetchone()
+        return row_count
         

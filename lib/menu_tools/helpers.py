@@ -185,9 +185,18 @@ def delete_classification():
 
 
 def list_languages_in_classification():
+    [
+        print(f"{command_index}. - {classification.name}")
+        for command_index, classification in zip(
+            range(int(Classification.row_count()[0])),
+            Classification.get_all()
+        )
+    ]
     name = input("Enter the classification name: ")
-    if classification := Classification.find_by_name(name):
-        display_languages(classification.languages())
+    if (classification := Classification.find_by_name(name)):
+        display_languages(f"{name} Languages", classification.languages())
+    else:
+        print(f"Classification with name, '{name}' not found!")
 
 
 """ Declare classifications commands"""
@@ -292,7 +301,9 @@ def update_language():
                 + "If you wish to keep the current value, simply press ENTER: "
             )
             new_speaker_count = (
-                int(new_speaker_count) if new_speaker_count else language.number_of_speakers
+                int(new_speaker_count)
+                if new_speaker_count
+                else language.number_of_speakers
             )
             print(new_speaker_count)
 
@@ -323,7 +334,7 @@ def update_language():
                 if new_classification_name
                 else language.classification_id
             )
-            #print(new_classification_id)
+            # print(new_classification_id)
 
             # Update
             language.name = new_name
