@@ -185,15 +185,21 @@ def delete_classification():
 
 
 def list_languages_in_classification():
-    [
-        print(f"{command_index}. - {classification.name}")
+    """TODO"""
+    names = {
+        command_index: classification.name
         for command_index, classification in zip(
-            range(int(Classification.row_count()[0])),
-            Classification.get_all()
+            range(int(Classification.row_count()[0])), Classification.get_all()
         )
-    ]
-    name = input("Enter the classification name: ")
-    if (classification := Classification.find_by_name(name)):
+    }
+
+    [print(f"{key}. {value}") for key, value in names.items()]
+    print()
+
+    name = names.get(
+        int(input("Type a number from the list above to select a classification: "))
+    )
+    if classification := Classification.find_by_name(name):
         display_languages(f"{name} Languages", classification.languages())
     else:
         print(f"Classification with name, '{name}' not found!")
