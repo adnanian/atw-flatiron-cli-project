@@ -30,6 +30,9 @@ def return_to_main_menu():
 def get_current_menu():
     return current_menu
 
+def invalid_option_message():
+    print("Invalid option number entered.")
+
 
 # Main Menu
 
@@ -196,13 +199,18 @@ def list_languages_in_classification():
     [print(f"{key}. {value}") for key, value in names.items()]
     print()
 
-    name = names.get(
-        int(input("Type a number from the list above to select a classification: "))
-    )
-    if classification := Classification.find_by_name(name):
-        display_languages(f"{name} Languages", classification.languages())
-    else:
-        print(f"Invalid option number entered.")
+    
+    try:
+        name = names.get(
+            int(input("Type a number from the list above to select a classification: "))
+        )
+        if classification := Classification.find_by_name(name):
+            display_languages(f"{name} Languages", classification.languages())
+        else:
+            invalid_option_message()
+    except Exception as exc:
+        invalid_option_message()
+    
 
 
 """ Declare classifications commands"""
