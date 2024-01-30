@@ -202,7 +202,7 @@ def list_languages_in_classification():
     if classification := Classification.find_by_name(name):
         display_languages(f"{name} Languages", classification.languages())
     else:
-        print(f"Classification with name, '{name}' not found!")
+        print(f"Invalid option number entered.")
 
 
 """ Declare classifications commands"""
