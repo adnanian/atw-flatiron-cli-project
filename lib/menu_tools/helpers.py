@@ -93,6 +93,18 @@ main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
 
 # Classifications Menu
 
+def display_classification_names_as_options():
+    """ TODO """
+    names = {
+        command_index + 1: classification.name
+        for command_index, classification in zip(
+            range(int(Classification.row_count()[0])), Classification.get_all()
+        )
+    }
+
+    [print(f"{key}. {value}") for key, value in names.items()]
+    print()
+    return names
 
 def non_id_classification_column_names():
     """TODO"""
@@ -175,31 +187,29 @@ def update_classification():
         except Exception as exc:
             print("Classification update failed:", exc)
     else:
-        print(f"Classification with name, '{name}', not found.")
+        invalid_option_message()
 
 
 def delete_classification():
-    name = input("Enter the name of the classification to delete: ")
-    if clasification := Classification.find_by_name(name):
-        clasification.delete()
-        print(f"Classification with name, '{name}' deleted!")
-    else:
-        print(f"Classification with name, '{name}' not found!")
+    names = display_classification_names_as_options()
+    try:
+        name = names.get(
+        int(input(
+            "Type a number from the list above to select a classification to delete: "
+        ))
+        )
+        if clasification := Classification.find_by_name(name):
+            clasification.delete()
+            print(f"Classification with name, '{name}' deleted!")
+        else:
+            invalid_option_message()
+    except Exception as exc:
+        invalid_option_message()
 
 
 def list_languages_in_classification():
     """TODO"""
-    names = {
-        command_index: classification.name
-        for command_index, classification in zip(
-            range(int(Classification.row_count()[0])), Classification.get_all()
-        )
-    }
-
-    [print(f"{key}. {value}") for key, value in names.items()]
-    print()
-
-    
+    names = display_classification_names_as_options()
     try:
         name = names.get(
             int(input("Type a number from the list above to select a classification: "))
