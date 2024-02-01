@@ -21,6 +21,7 @@ class Menu:
         
     def execute_command(self, index):
         if index >= 0 and index < len(commands := self.command_list):
+            print("\n", commands[index].prompt, "\n")
             commands[index].callback()
         else:
             print("Invalid choice")

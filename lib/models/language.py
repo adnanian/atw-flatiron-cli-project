@@ -5,7 +5,7 @@ from models.classification import Classification
 
 class Language:
     all = {}
-
+    MODEL_NAME = "language"
     STATUSES = ["LIVING", "ENDANGERED", "DEAD", "EXTINCT"]
 
     def __init__(
@@ -259,3 +259,12 @@ class Language:
         """
         columns = CURSOR.execute(sql).fetchall()
         return columns
+    
+    @classmethod
+    def row_count(cls):
+        """ TODO """
+        sql = """
+            SELECT COUNT(*) FROM languages
+        """
+        row_count = CURSOR.execute(sql).fetchone()
+        return row_count

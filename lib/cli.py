@@ -13,7 +13,8 @@ def main():
         menu()
         choice = input("> ")
         execute_clear_terminal()
-        get_current_menu().execute_command(int(choice))
+        choice = int(choice)
+        get_current_menu().execute_command(choice)
 
 
 def menu():

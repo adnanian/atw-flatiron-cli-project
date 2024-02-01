@@ -5,6 +5,7 @@ from models.model_helpers import (validate_attribute_text)
 
 class Classification:
     all = {}
+    MODEL_NAME = "classification"
 
     def __init__(self, name, geographic_locaiton, id=None):
         self.id = id

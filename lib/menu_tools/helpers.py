@@ -15,9 +15,24 @@ EXIT_PROMPT = "Exit the program"
 TOGGLE_CLEAR_TERMINAL_PROMPT = (
     f"Clear Terminal After Each Command: {'ON' if clear_terminal_on else 'OFF'}"
 )
+
+# Prompt for commands that take the user to the main menu.
 MAIN_MENU_PROMPT = "Return to main menu"
-CLASSIFICATIONS_PROMPT = "Work with classifications"
-LANGUAGES_PROMPT = "Work with languages"
+
+# Prompt for commands that take the user to the classifications menu.
+CLASSIFICATION_MENU_PROMPT = "Go to classifications menu"
+
+# Prompt for commands that require to enter a number associated with a printed classification name.
+SELECT_CLASSIFICATION_PROMPT = (
+    "Type a number from the list above to select a classification: "
+)
+
+# Prompt for commands that take the user to the languages menu.
+LANGUAGE_MENU_PROMPT = "Go to languages menu"
+
+# Prompt for commands that reqruie to enter a number associated with a printed language name.
+SELECT_LANGUAGE_PROMPT = "Type a number from the list above to select a language: "
+
 
 # For all menus
 
@@ -30,8 +45,45 @@ def return_to_main_menu():
 def get_current_menu():
     return current_menu
 
+
 def invalid_option_message():
     print("Invalid option number entered.")
+
+
+def select_model_name_option(prompt, model_name):
+    """TODO"""
+    if isinstance(model_name, str) and (
+        model_name == Classification.MODEL_NAME or model_name == Language.MODEL_NAME
+    ):
+        names = {
+            option_number + 1: model.name
+            for option_number, model in zip(
+                range(
+                    Classification.row_count()[0]
+                    if model_name == Classification.MODEL_NAME
+                    else Language.row_count()[0]
+                ),
+                Classification.get_all()
+                if model_name == Classification.MODEL_NAME
+                else Language.get_all()
+            )
+        }
+        [print(f"{key}. {value}") for key, value in names.items()]
+        print()
+        model_to_return = None
+        try:
+            name = names[int(input(prompt))]
+            model_to_return = (
+                Classification.find_by_name(name)
+                if model_name == Classification.MODEL_NAME
+                else Language.find_by_name(name)
+            )
+        except Exception as exc:
+            invalid_option_message()
+        finally:
+            return model_to_return
+    else:
+        raise ValueError("Model name must be either a classification or language.")
 
 
 # Main Menu
@@ -64,6 +116,7 @@ def load_languages_menu():
 
 
 def toggle_clear_terminal():
+    """TODO"""
     global clear_terminal_on
     clear_terminal_on = not clear_terminal_on
     try:
@@ -87,14 +140,15 @@ main_menu = Menu("main")
 main_menu.add_command(EXIT_PROMPT, exit_program)
 main_menu.add_command(TOGGLE_CLEAR_TERMINAL_PROMPT, toggle_clear_terminal)
 main_menu.add_command("Display entire database", display_everything)
-main_menu.add_command(CLASSIFICATIONS_PROMPT, load_classifications_menu)
-main_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
+main_menu.add_command(CLASSIFICATION_MENU_PROMPT, load_classifications_menu)
+main_menu.add_command(LANGUAGE_MENU_PROMPT, load_languages_menu)
 
 
 # Classifications Menu
 
+
 def display_classification_names_as_options():
-    """ TODO """
+    """TODO"""
     names = {
         command_index + 1: classification.name
         for command_index, classification in zip(
@@ -105,6 +159,7 @@ def display_classification_names_as_options():
     [print(f"{key}. {value}") for key, value in names.items()]
     print()
     return names
+
 
 def non_id_classification_column_names():
     """TODO"""
@@ -144,14 +199,15 @@ def display_classifications(title, classification_rows):
 
 def print_classifications_as_table():
     """TODO"""
-    display_classifications("Language Classifications", Classification.get_all())
+    display_classifications("Classifications", Classification.get_all())
 
 
 def create_classification():
     """TODO"""
-    name = input("Enter the classification name: ")
-    geographic_location = input("Enter the classification's geographic location: ")
+
     try:
+        name = input("Enter the classification name: ")
+        geographic_location = input("Enter the classification's geographic location: ")
         classification = Classification.create(name, geographic_location)
         display_classifications("Classification successfully created", [classification])
     except Exception as exc:
@@ -191,12 +247,15 @@ def update_classification():
 
 
 def delete_classification():
+    """TODO"""
     names = display_classification_names_as_options()
     try:
         name = names.get(
-        int(input(
-            "Type a number from the list above to select a classification to delete: "
-        ))
+            int(
+                input(
+                    "Type a number from the list above to select a classification to delete: "
+                )
+            )
         )
         if clasification := Classification.find_by_name(name):
             clasification.delete()
@@ -209,6 +268,7 @@ def delete_classification():
 
 def list_languages_in_classification():
     """TODO"""
+    """
     names = display_classification_names_as_options()
     try:
         name = names.get(
@@ -220,14 +280,20 @@ def list_languages_in_classification():
             invalid_option_message()
     except Exception as exc:
         invalid_option_message()
-    
+        """
+    if classification := select_model_name_option(
+        SELECT_CLASSIFICATION_PROMPT, Classification.MODEL_NAME
+    ):
+        display_languages(
+            f"{classification.name} Languages", classification.languages()
+        )
 
 
 """ Declare classifications commands"""
 classifications_menu = Menu("classifications")
 classifications_menu.add_command(EXIT_PROMPT, exit_program)
 classifications_menu.add_command(MAIN_MENU_PROMPT, return_to_main_menu)
-classifications_menu.add_command(LANGUAGES_PROMPT, load_languages_menu)
+classifications_menu.add_command(LANGUAGE_MENU_PROMPT, load_languages_menu)
 classifications_menu.add_command(
     "Display classifications table", print_classifications_as_table
 )
@@ -282,25 +348,25 @@ def display_languages(title, language_rows):
 
 def create_language():
     """TODO"""
-    name = input("Enter the language name: ")
-    speakers = int(
-        input(
-            "\nEnter the number of speakers for that language.\n"
-            + "Do not use commas: "
-        )
-    )
-    country = input("\nEnter the country the language originates from: ")
-    status = input(
-        "\nEnter the language's current existence status:\n\n"
-        + "LIVING - language is alive today and currently in use by millions of people\n"
-        + "ENDANGERED - language which has a very few number of native speakers and at risk of going extinct\n"
-        + "DEAD - language that has no native speakers, but is spoken as a second language in some areas\n"
-        + "EXTINCT - language that is no longer extinct and no longer possible to revive\n\n"
-        + "Status: "
-    )
-    classification_name = input("Enter the classification name: ").title()
-    classification_id = Classification.find_by_name(classification_name).id
     try:
+        name = input("Enter the language name: ")
+        speakers = int(
+            input(
+                "\nEnter the number of speakers for that language.\n"
+                + "Do not use commas: "
+            )
+        )
+        country = input("\nEnter the country the language originates from: ")
+        status = input(
+            "\nEnter the language's current existence status:\n\n"
+            + "LIVING - language is alive today and currently in use by millions of people\n"
+            + "ENDANGERED - language which has a very few number of native speakers and at risk of going extinct\n"
+            + "DEAD - language that has no native speakers, but is spoken as a second language in some areas\n"
+            + "EXTINCT - language that is no longer extinct and no longer possible to revive\n\n"
+            + "Status: "
+        )
+        classification_name = input("Enter the classification name: ").title()
+        classification_id = Classification.find_by_name(classification_name).id
         language = Language.create(name, speakers, country, status, classification_id)
         display_languages("Language successfully created", [language])
     except Exception as exc:
@@ -392,7 +458,7 @@ def print_languages_as_table():
 languages_menu = Menu("languages")
 languages_menu.add_command(EXIT_PROMPT, exit_program)
 languages_menu.add_command(MAIN_MENU_PROMPT, return_to_main_menu)
-languages_menu.add_command(CLASSIFICATIONS_PROMPT, load_classifications_menu)
+languages_menu.add_command(CLASSIFICATION_MENU_PROMPT, load_classifications_menu)
 languages_menu.add_command("Display languages table", print_languages_as_table)
 languages_menu.add_command("Create language", create_language)
 languages_menu.add_command("Update language", update_language)
