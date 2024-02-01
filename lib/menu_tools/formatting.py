@@ -83,3 +83,6 @@ def table_header(title, values, column_lengths):
     """ TODO """
     row = table_row(values, column_lengths)
     return f"{title}\n\n{row}\n{('-' * len(row))}"
+
+def print_dictionary_as_menu(dictionary):
+    [print(f"{key}. {value}") for key, value in dictionary.items()]
