@@ -4,6 +4,13 @@ import types
 class Command:
     
     def __init__(self, index, prompt, callback):
+        """ Create a new instance of command.
+
+        Args:
+            index (int): the number associated with the command.
+            prompt (str): the message displayed to the user.
+            callback (function): the function that is to be invoked.
+        """
         self.index = index
         self.prompt = prompt
         self.callback = callback
@@ -43,4 +50,12 @@ class Command:
             raise ValueError("Callback must be a declared function")
         
     def __repr__(self) -> str:
+        return f"{self.index}. {self.prompt}"
+    
+    def to_menu_option(self):
+        """ Returns a string representation of a command using its index and prompt attributes.
+
+        Returns:
+            str: a string in the format: [index]. [prompt]
+        """
         return f"{self.index}. {self.prompt}"

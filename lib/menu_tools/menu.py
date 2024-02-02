@@ -16,7 +16,7 @@ class Menu:
         
     def display_commands(self):
         for command in self.command_list:
-            print(repr(command))
+            print(command.to_menu_option())
         print()
         
     def execute_command(self, index):
