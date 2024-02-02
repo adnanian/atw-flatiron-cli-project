@@ -8,6 +8,13 @@ class Classification:
     MODEL_NAME = "classification"
 
     def __init__(self, name, geographic_locaiton, id=None):
+        """ Create an instance of Classification.
+
+        Args:
+            name (str): the name.
+            geographic_locaiton (str): the main geographic location of the language classification.
+            id (int, optional): the id number represented in the database. Defaults to None.
+        """
         self.id = id
         self.name = name
         self.geographic_location = geographic_locaiton
@@ -41,7 +48,7 @@ class Classification:
 
     @classmethod
     def create_table(cls):
-        """TODO"""
+        """ Creates the classifciations table in the language_categories database."""
         sql = """
             CREATE TABLE classifications(
                 id INTEGER PRIMARY KEY,
@@ -53,7 +60,7 @@ class Classification:
         
     @classmethod
     def drop_table(cls):
-        """ TODO may not need to use. Will need to see. """
+        """ Deletes the classifications table from the language_categories database. """
         sql = """
             DROP TABLE IF EXISTS classifications
         """
@@ -61,7 +68,7 @@ class Classification:
         execute_and_commit(sql)
         
     def save(self):
-        """ TODO """
+        """ Adds a new row to the classifications table by inserting the property values of the instance this method was called on into the table. """
         sql = """
             INSERT INTO classifications (name, geographic_location)
             VALUES (?, ?)
@@ -74,7 +81,17 @@ class Classification:
         
     @classmethod
     def create(cls, name, geographic_locaiton):
-        """ TODO """
+        """ First, creates a new instance of Classification.
+            Then, creates a new row consisting of that instance's property values.
+            Finally, adds that row to the classifications table.
+
+        Args:
+            name (_type_): the name.
+            geographic_locaiton (_type_): the main geographic location of the language classification.
+
+        Returns:
+            _type_: _description_
+        """
         classification = cls(name, geographic_locaiton)
         classification.save()
         return classification
