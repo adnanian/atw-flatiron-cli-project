@@ -1,5 +1,6 @@
 from models.model_helpers import is_non_empty_string
 
+# When printing out table headers.
 ROW_NUMBER_HEADER = "Row #"
 
 def divider():
@@ -18,8 +19,18 @@ def end_divider():
     print()
     divider()
 
+# NOT USED
 def format_string_cell_left(var, char_limit):
-    """ TODO """
+    """ Justifies a table cell to the left and returns that value to be displayed to the cell.
+
+    Args:
+        var (str): the string.
+        char_limit (int): _description_
+
+    Returns:
+        str: var padded to the righty by a calculated number of spaces. 
+             if the length of var is greater than the char_limit, then var is trimmmed.
+    """
     if not is_non_empty_string:
         var = str(var)
     if (length := len(var)) > char_limit:
@@ -28,9 +39,18 @@ def format_string_cell_left(var, char_limit):
     spaces = " " * space_size
     return var + spaces
 
-
+# NOT USED
 def format_string_cell_center(var, char_limit):
-    """ TODO """
+    """ Justifies a table cell to the center and returns that value to be displayed to the cell.
+
+    Args:
+        var (str): the string.
+        char_limit (int): _description_
+
+    Returns:
+        str: var padded to the righty by a calculated number of spaces. 
+             if the length of var is greater than the char_limit, then var is trimmmed.
+    """
     if not is_non_empty_string:
         var = str(var)
     if (length := len(var)) <= char_limit:
@@ -52,7 +72,16 @@ def format_string_cell_center(var, char_limit):
 
 
 def format_string_cell_right(var, char_limit):
-    """ TODO """
+    """ Justifies a table cell to the right and returns that value to be displayed to the cell.
+
+    Args:
+        var (str): the string.
+        char_limit (int): _description_
+
+    Returns:
+        str: var padded to the righty by a calculated number of spaces. 
+             if the length of var is greater than the char_limit, then var is trimmmed.
+    """
     if not is_non_empty_string:
         var = str(var)
     if (length := len(var)) > char_limit:
@@ -63,7 +92,21 @@ def format_string_cell_right(var, char_limit):
 
 
 def table_row(values, column_lengths, row_number):
-    """ TODO """
+    """ Formats the values of a model instance as a table row and returns that format.
+
+    Args:
+        values (tuple): the model instance's attributes; the columns
+        column_lengths (tuple): the lengths that each cell in the table should be set to.
+        row_number (int or str): the row number for the table format.
+
+    Raises:
+        ValueError: If row_number is not a positive integer or the string: 'Row #'.
+        TypeError: If the variable passed in values is not a tuple.
+        ValueError: If the lengths of values and column_lengths are not equal.
+
+    Returns:
+        str: a table row of the model instance's attribute values to print to the terminal.
+    """
     if len(values) == len(column_lengths):
         if type(values) is tuple:
             if ((type(row_number) is int and row_number > 0) or row_number == ROW_NUMBER_HEADER):
@@ -87,7 +130,16 @@ def table_row(values, column_lengths, row_number):
 
 
 def table_header(title, values, column_lengths):
-    """ TODO """
+    """Formats the attribute names of a model instance as a table header and returns that format.
+
+    Args:
+        title (str): the name of the table
+        values (tuple): the model instance's attribute names, the column names
+        column_lengths (_type_): the lengths that the columns should be set to.
+
+    Returns:
+        str: a table header of the model instance's attribute names to print to the terminal.
+    """
     row = table_row(values, column_lengths, ROW_NUMBER_HEADER)
     return f"{title}\n\n{row}\n{('-' * len(row))}"
 
