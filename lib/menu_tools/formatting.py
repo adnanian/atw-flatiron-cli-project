@@ -1,5 +1,7 @@
 from models.model_helpers import is_non_empty_string
 
+ROW_NUMBER_HEADER = "Row #"
+
 def divider():
     """Prints 100 asterisks to the terminal."""
     print("*" * 100)
@@ -60,18 +62,23 @@ def format_string_cell_right(var, char_limit):
     return spaces + var
 
 
-def table_row(values, column_lengths):
+def table_row(values, column_lengths, row_number):
     """ TODO """
     if len(values) == len(column_lengths):
         if type(values) is tuple:
-            row = ""
-            for index in range(length := len(values)):
-                formatted_column = format_string_cell_right(
-                    values[index], column_lengths[index]
-                )
-                divider = "|" if (index < length - 1) else ""
-                column = f" {formatted_column} {divider}"
-                row += column
+            if ((type(row_number) is int and row_number > 0) or row_number == ROW_NUMBER_HEADER):
+                ROW_NUMBER_LENGTH = 6
+                row = format_string_cell_right(str(row_number), ROW_NUMBER_LENGTH) + " |"
+                for index in range(length := len(values)):
+                    formatted_column = format_string_cell_right(
+                        values[index], column_lengths[index]
+                    )
+                    divider = "|" if (index < length - 1) else ""
+                    column = f" {formatted_column} {divider}"
+                    row += column
+            else:
+                raise ValueError("Row number must be either a positive integer or the string header 'Row #'")
+            
             return row
         else:
             raise TypeError("Values in the table must be passed as a tuple.")
@@ -81,8 +88,9 @@ def table_row(values, column_lengths):
 
 def table_header(title, values, column_lengths):
     """ TODO """
-    row = table_row(values, column_lengths)
+    row = table_row(values, column_lengths, ROW_NUMBER_HEADER)
     return f"{title}\n\n{row}\n{('-' * len(row))}"
 
 def print_dictionary_as_menu(dictionary):
+    """ TODO """
     [print(f"{key}. {value}") for key, value in dictionary.items()]

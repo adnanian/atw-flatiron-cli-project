@@ -38,15 +38,18 @@ SELECT_LANGUAGE_PROMPT = "Type a number from the list above to select a language
 
 
 def return_to_main_menu():
+    """ TODO """
     global current_menu
     current_menu = Menu.all["main"]
 
 
 def get_current_menu():
+    """ TODO """
     return current_menu
 
 
 def invalid_option_message():
+    """ TODO """
     print("Invalid option number entered.")
 
 
@@ -104,12 +107,14 @@ def display_everything():
 
 
 def load_classifications_menu():
+    """ TODO """
     global current_menu
     current_menu = Menu.all["classifications"]
     print(current_menu.key_name)
 
 
 def load_languages_menu():
+    """ TODO """
     global current_menu
     current_menu = Menu.all["languages"]
     print(current_menu.key_name)
@@ -130,6 +135,7 @@ def toggle_clear_terminal():
 
 
 def execute_clear_terminal():
+    """ TODO """
     if clear_terminal_on:
         os.system("clear")
     print()
@@ -159,13 +165,13 @@ def get_classification_column_lengths(header_names):
         for header in header_names
     ]
 
-def print_classification_table_row(classification, column_lengths):
+def print_classification_table_row(classification, column_lengths, row_number):
     """TODO"""
     if isinstance(classification, Classification):
         name = classification.name
         location = classification.geographic_location
         cells = (name, location)
-        print(table_row(cells, column_lengths))
+        print(table_row(cells, column_lengths, row_number))
     else:
         raise TypeError("First argument must be a classification.")
 
@@ -174,8 +180,8 @@ def display_classifications(title, classification_rows):
     header_names = non_id_classification_column_names()
     column_lengths = get_classification_column_lengths(header_names)
     print(table_header(title, header_names, column_lengths))
-    for classification in classification_rows:
-        print_classification_table_row(classification, column_lengths)
+    for classification, row_number in zip(classification_rows, range(1, len(classification_rows) + 1)):
+        print_classification_table_row(classification, column_lengths, row_number)
     print()
 
 def print_classifications_as_table():
@@ -272,7 +278,7 @@ def get_language_column_lengths(header_names):
         for header in header_names
     ]
 
-def print_language_table_row(language, column_lengths):
+def print_language_table_row(language, column_lengths, row_number):
     """TODO"""
     if isinstance(language, Language):
         name = language.name
@@ -281,7 +287,7 @@ def print_language_table_row(language, column_lengths):
         status = language.status
         classification_name = Classification.find_by_id(language.classification_id).name
         cells = (name, speakers, country, status, classification_name)
-        print(table_row(cells, column_lengths))
+        print(table_row(cells, column_lengths, row_number))
     else:
         raise TypeError("First argument must be a language.")
 
@@ -290,11 +296,12 @@ def display_languages(title, language_rows):
     header_names = non_id_language_column_names()
     column_lengths = get_language_column_lengths(header_names)
     print(table_header(title, header_names, column_lengths))
-    for language in language_rows:
-        print_language_table_row(language, column_lengths)
+    for language, row_number in zip(language_rows, range(1, len(language_rows) + 1)):
+        print_language_table_row(language, column_lengths, row_number)
     print()
     
 def select_language_status():
+    """ TODO """
     print()
     statuses = {
         option_number + 1: status
@@ -334,6 +341,7 @@ def create_language():
 
 
 def update_language():
+    """ TODO """
     if language := select_model_name_option(SELECT_LANGUAGE_PROMPT, Language.MODEL_NAME):
         try:
             # New name
@@ -400,19 +408,12 @@ def update_language():
 
 def delete_language():
     """ TODO """
-    """
-    name = input("Enter the name of the language to delete: ")
-    if language := Language.find_by_name(name):
-        language.delete()
-        print(f"Language with name, '{name}' deleted!")
-    else:
-        print(f"Language with name, '{name}' not found!")
-    """
     if language := select_model_name_option(SELECT_LANGUAGE_PROMPT, Language.MODEL_NAME):
         language.delete()
 
 
 def print_languages_as_table():
+    """ TODO """
     display_languages("Languages", Language.get_all())
 
 
