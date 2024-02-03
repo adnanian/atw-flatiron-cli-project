@@ -110,14 +110,16 @@ def load_classifications_menu():
     """ TODO """
     global current_menu
     current_menu = Menu.all["classifications"]
-    print(current_menu.key_name)
+    #print(current_menu.key_name)
+    print_classifications_as_table()
 
 
 def load_languages_menu():
     """ TODO """
     global current_menu
     current_menu = Menu.all["languages"]
-    print(current_menu.key_name)
+    #print(current_menu.key_name)
+    print_languages_as_table()
 
 
 def toggle_clear_terminal():

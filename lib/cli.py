@@ -13,8 +13,11 @@ def main():
         menu()
         choice = input("> ")
         execute_clear_terminal()
-        choice = int(choice)
-        get_current_menu().execute_command(choice)
+        try:
+            choice = int(choice)
+            get_current_menu().execute_command(choice)
+        except Exception as exc:
+            print("Must type a number from the menu list to select an option.")
 
 
 def menu():
