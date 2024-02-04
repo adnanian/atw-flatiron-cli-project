@@ -97,7 +97,7 @@ class Classification:
         return classification
     
     def update(self):
-        """ TODO """
+        """ Updates the table row corresponding to the current Classification instance. """
         sql = """
             UPDATE classifications
             SET name = ?, geographic_location = ?
@@ -106,7 +106,8 @@ class Classification:
         execute_and_commit(sql, (self.name, self.geographic_location, self.id))
         
     def delete(self):
-        """ TODO """
+        """ Deletes the table row corresponding to the current Classification instance, 
+        delete the dictionary entry, and reassign the id attribute to None."""
         
         sql = """
             DELETE FROM classifications
@@ -121,7 +122,14 @@ class Classification:
     # Review with instructor
     @classmethod
     def instance_from_db(cls, row):
-        """ TODO """
+        """Return a Classification object having the attribute values from the table row.
+
+        Args:
+            row (database row): the row from the database
+
+        Returns:
+            the Classification object matching that row if it exists; None otherwise.
+        """
         # Check the classification for an existing instance using the row's primary key
         classification = cls.all.get(row[0])
         if classification:
@@ -137,7 +145,7 @@ class Classification:
             
     @classmethod
     def get_all(cls):
-        """ TODO """
+        """ Returns a list containing the Classification object per row in the table. """
         sql = """
             SELECT *
             FROM classifications
@@ -149,7 +157,9 @@ class Classification:
     
     @classmethod
     def find_by_id(cls, id):
-        """ TODO """
+        """
+        
+        """
         sql = """
             SELECT *
             FROM classifications
@@ -161,7 +171,7 @@ class Classification:
     
     @classmethod
     def find_by_name(cls, name):
-        """ TODO """
+        """ """
         sql = """
             SELECT *
             FROM classifications
@@ -172,7 +182,7 @@ class Classification:
         return cls.instance_from_db(row) if row else None
     
     def languages(self):
-        """ TODO """
+        """ Returns a list of languages associated with the classification."""
         from models.language import Language
         sql = """
             SELECT *
