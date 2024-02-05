@@ -13,7 +13,7 @@ class Classification:
         Args:
             name (str): the name.
             geographic_locaiton (str): the main geographic location of the language classification.
-            id (int, optional): the id number represented in the database. Defaults to None.
+            id (int, optional): the id number represented in the classifications table in the database. Defaults to None.
         """
         self.id = id
         self.name = name
@@ -68,7 +68,7 @@ class Classification:
         execute_and_commit(sql)
         
     def save(self):
-        """ Adds a new row to the classifications table by inserting the property values of the instance this method was called on into the table. """
+        """ Adds a new row to the classifications table by inserting the attribute values of the instance this method was called on into the table. """
         sql = """
             INSERT INTO classifications (name, geographic_location)
             VALUES (?, ?)
@@ -86,11 +86,11 @@ class Classification:
             Finally, adds that row to the classifications table.
 
         Args:
-            name (_type_): the name.
-            geographic_locaiton (_type_): the main geographic location of the language classification.
+            name (str): the name.
+            geographic_locaiton (str): the main geographic location of the language classification.
 
         Returns:
-            _type_: _description_
+            Classification: the created instance of Classification.
         """
         classification = cls(name, geographic_locaiton)
         classification.save()

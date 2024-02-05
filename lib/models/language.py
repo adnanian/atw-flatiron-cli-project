@@ -9,6 +9,7 @@ class Language:
     STATUSES = ["LIVING", "ENDANGERED", "DEAD", "EXTINCT"]
 
     def __init__(
+        
         self,
         name,
         number_of_speakers,
@@ -17,6 +18,16 @@ class Language:
         classification_id,
         id=None,
     ):
+        """ Create an instance of Language.
+
+        Args:
+            name (str): the name.
+            number_of_speakers (int): the total number of living speakers (both native and non-native).
+            country_of_origin (str): the country the language originated from.
+            status (str): the status - must be one of 4 values: [LIVING, ENDANGERED, DEAD, OR EXTINCT]
+            classification_id (int): foreign key for the languages table.
+            id (int, optional): the id number represented in the languages table in the database. Defaults to None.. Defaults to None.
+        """
         self.id = id
         self.name = name
         self.number_of_speakers = number_of_speakers
@@ -81,7 +92,7 @@ class Language:
 
     @classmethod
     def create_table(cls):
-        """TODO"""
+        """Creates the languages table in the language_categories database."""
         sql = """
             CREATE TABLE languages(
                 id INTEGER PRIMARY KEY,
@@ -97,7 +108,7 @@ class Language:
 
     @classmethod
     def drop_table(cls):
-        """TODO may not need to use. Will need to see."""
+        """Deletes the languages table from the language_categories database."""
         sql = """
             DROP TABLE IF EXISTS languages
         """
@@ -105,7 +116,7 @@ class Language:
         execute_and_commit(sql)
 
     def save(self):
-        """TODO"""
+        """Adds a new row to the languages table by inserting the attribute values of the instance this method was called on into the table."""
         sql = """
             INSERT INTO languages (name, number_of_speakers, country_of_origin, status, classification_id)
             VALUES (?, ?, ?, ?, ?)
@@ -129,7 +140,20 @@ class Language:
     def create(
         cls, name, number_of_speakers, country_of_origin, status, classification_id
     ):
-        """TODO"""
+        """First, creates a new instance of Language.
+            Then, creates a new row consisting of that instance's property values.
+            Finally, adds that row to the languages table.
+
+        Args:
+            name (str): the name.
+            number_of_speakers (int): the total number of living speakers (both native and non-native).
+            country_of_origin (str): the country the language originated from.
+            status (str): the status - must be one of 4 values: [LIVING, ENDANGERED, DEAD, OR EXTINCT]
+            classification_id (int): foreign key for the languages table.
+
+        Returns:
+            Language: the created instance of Language.
+        """
         language = cls(
             name, number_of_speakers, country_of_origin, status, classification_id
         )
@@ -137,7 +161,7 @@ class Language:
         return language
 
     def update(self):
-        """TODO"""
+        """Updates the table row corresponding to the current Language instance."""
         sql = """
             UPDATE languages
             SET name = ?, number_of_speakers = ?, country_of_origin = ?, status = ?, classification_id = ?
@@ -171,7 +195,14 @@ class Language:
     # Review with instructor
     @classmethod
     def instance_from_db(cls, row):
-        """TODO"""
+        """Return a Language object having the attribute values from the table row.
+
+        Args:
+            row (_type_): _description_
+
+        Returns:
+            _type_: the Language object matching that row if it exists; None otherwise.
+        """
         # Check the language for an existing instance using the row's primary key
         language = cls.all.get(row[0])
         if language:
@@ -190,7 +221,7 @@ class Language:
 
     @classmethod
     def get_all(cls):
-        """TODO"""
+        """Returns a list containing the Language object per row in the table. """
         sql = """
             SELECT *
             FROM languages
@@ -202,7 +233,7 @@ class Language:
 
     @classmethod
     def find_by_id(cls, id):
-        """TODO"""
+        """Return a Language object corresponding to the table row matching the specified primary key"""
         sql = """
             SELECT *
             FROM languages
@@ -214,7 +245,7 @@ class Language:
 
     @classmethod
     def find_by_name(cls, name):
-        """TODO"""
+        """Return a Language object corresponding to first table row matching specified name"""
         sql = """
             SELECT *
             FROM languages
@@ -226,7 +257,7 @@ class Language:
     
     @classmethod
     def get_longest_attribute_length(cls, attribute_name):
-        """ TODO """
+        """ Returns the longest length among all the values of a table in a given column in the languages table. """
         if attribute_name in (column_names := ("name", "number_of_speakers", "country_of_origin", "status", "classification")):
             sql = ""
             if (attribute_name == column_names[1]):
@@ -253,7 +284,7 @@ class Language:
 
     @classmethod
     def get_column_names(cls):
-        """ TODO """
+        """ Returns the names of columns in the languages table. """
         sql = """
             PRAGMA table_info(languages)
         """
@@ -262,7 +293,7 @@ class Language:
     
     @classmethod
     def row_count(cls):
-        """ TODO """
+        """ Returns the number of rows in the languages table. """
         sql = """
             SELECT COUNT(*) FROM languages
         """

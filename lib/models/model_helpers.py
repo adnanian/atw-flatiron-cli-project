@@ -1,6 +1,14 @@
 NAME_COL_LIMIT = 24
 
 def is_non_empty_string(var):
+    """Validates if a given variable is a non-empty string.
+
+    Args:
+        var (any): the variable.
+
+    Returns:
+        bool: True if var is a non-empty string; False otherwise.
+    """
     return isinstance(var, str) and len(var)
 
 
