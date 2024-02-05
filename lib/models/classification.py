@@ -157,9 +157,7 @@ class Classification:
     
     @classmethod
     def find_by_id(cls, id):
-        """
-        
-        """
+        """Return a Classification object corresponding to the table row matching the specified primary key"""
         sql = """
             SELECT *
             FROM classifications
@@ -171,7 +169,7 @@ class Classification:
     
     @classmethod
     def find_by_name(cls, name):
-        """ """
+        """Return a Classification object corresponding to first table row matching specified name"""
         sql = """
             SELECT *
             FROM classifications
@@ -197,7 +195,7 @@ class Classification:
     
     @classmethod
     def get_longest_attribute_length(cls, attribute_name):
-        """ TODO """
+        """ Returns the longest length among all the values of a table in a given column in the classifications table."""
         if attribute_name in ("name", "geographic_location"):
             sql = f"""
                 SELECT length({attribute_name})
@@ -212,7 +210,7 @@ class Classification:
         
     @classmethod
     def get_column_names(cls):
-        """ TODO """
+        """ Returns the names of columns in the classification table. """
         sql = """
             PRAGMA table_info(classifications)
         """
@@ -221,7 +219,7 @@ class Classification:
        
     @classmethod
     def row_count(cls):
-        """ TODO """
+        """ Returns the number of rows in the classifications table. """
         sql = """
             SELECT COUNT(*) FROM classifications
         """
