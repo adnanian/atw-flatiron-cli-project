@@ -9,6 +9,8 @@ from menu_tools.helpers import (
 
 
 def main():
+    """_Runs menu for as long as the user does not terminate the program.
+    """
     while True:
         menu()
         choice = input("> ")
@@ -21,6 +23,8 @@ def main():
 
 
 def menu():
+    """Prints the current menu.
+    """
     print()
     end_divider()
     begin_divider()
