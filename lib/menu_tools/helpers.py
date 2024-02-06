@@ -38,23 +38,37 @@ SELECT_LANGUAGE_PROMPT = "Type a number from the list above to select a language
 
 
 def return_to_main_menu():
-    """ TODO """
+    """ Set the current menu to the main menu. """
     global current_menu
     current_menu = Menu.all["main"]
 
 
 def get_current_menu():
-    """ TODO """
+    """ Get the current menu to be displayed to the user. """
     return current_menu
 
 
 def invalid_option_message():
-    """ TODO """
+    """ Prints a message stating that an invalid number has been entered by the user. """
     print("Invalid option number entered.")
 
 
 def select_model_name_option(prompt, model_name):
-    """TODO"""
+    """
+    Prints a menu of model names (either Classification or Language) to the user,
+    allowing the user to select a number associated with the name attribute of 
+    the model instance. Once a number is selected, the model object is returned.
+
+    Args:
+        prompt (str): the prompt to display to the user.
+        model_name (Classification or Language): the name of the model (classification or language).
+
+    Raises:
+        ValueError: If the model_name argument isn't passed as either "classification or language"
+
+    Returns:
+        Classification, Language, or None: the model object if a valid number was selected, None otherwise.
+    """
     if isinstance(model_name, str) and (
         model_name == Classification.MODEL_NAME or model_name == Language.MODEL_NAME
     ):
@@ -93,7 +107,7 @@ def select_model_name_option(prompt, model_name):
 
 
 def exit_program():
-    """TODO"""
+    """ Terminates the program. """
     print("Goodbye!")
     exit()
 
@@ -107,7 +121,7 @@ def display_everything():
 
 
 def load_classifications_menu():
-    """ TODO """
+    """ Sets the current menu to the classifications menu and displays the current data to the user. """
     global current_menu
     current_menu = Menu.all["classifications"]
     #print(current_menu.key_name)
@@ -115,7 +129,7 @@ def load_classifications_menu():
 
 
 def load_languages_menu():
-    """ TODO """
+    """ Sets the current menu to the languages menu and displays the current data to the user. """
     global current_menu
     current_menu = Menu.all["languages"]
     #print(current_menu.key_name)
@@ -123,7 +137,11 @@ def load_languages_menu():
 
 
 def toggle_clear_terminal():
-    """TODO"""
+    """
+    Enables or disables the setting to clear the terminal after the execution of a command by a user typing a number.
+    If this setting is on at the time this method is called, then calling it will toggle it off.
+    If this setting is off at the time this method is called, then calling it will toggle it on.
+    """
     global clear_terminal_on
     clear_terminal_on = not clear_terminal_on
     try:
@@ -137,7 +155,7 @@ def toggle_clear_terminal():
 
 
 def execute_clear_terminal():
-    """ TODO """
+    """ Clears the terminal (if the setting is on) and prints a new empty line. """
     if clear_terminal_on:
         os.system("clear")
     print()
@@ -155,20 +173,40 @@ main_menu.add_command(LANGUAGE_MENU_PROMPT, load_languages_menu)
 # Classifications Menu
 
 def non_id_classification_column_names():
-    """TODO"""
+    """ Returns all the column names from the classifications table (with the exception of id).
+
+    Returns:
+        tuple: the non-id column names as a tuple 
+    """
     column_names = [column[1] for column in Classification.get_column_names()]
     column_names = tuple(column_names[1 : len(column_names)])
     return column_names
 
 def get_classification_column_lengths(header_names):
-    """TODO"""
+    """Returns the longest lengths from the cells of each non-id classificaiton column.
+
+    Args:
+        header_names (tuple): the names of the columns/headers
+
+    Returns:
+        list: the calculated column lengths as a list.
+    """
     return [
         max(len(header), int(Classification.get_longest_attribute_length(header)[0]))
         for header in header_names
     ]
 
 def print_classification_table_row(classification, column_lengths, row_number):
-    """TODO"""
+    """ Displays to the user the information of one Classification instance as a table row.
+
+    Args:
+        classification (Classification): the Classification object.
+        column_lengths (list): the column lengths that the row should be set to.
+        row_number (int): the row number to print.
+
+    Raises:
+        TypeError: if the first argument is not an instance of Classification.
+    """
     if isinstance(classification, Classification):
         name = classification.name
         location = classification.geographic_location
@@ -187,11 +225,15 @@ def display_classifications(title, classification_rows):
     print()
 
 def print_classifications_as_table():
-    """TODO"""
+    """
+    Displays the entire classifications table to the user.
+    """
     display_classifications("Classifications", Classification.get_all())
 
 def create_classification():
-    """TODO"""
+    """
+    Prompts a user to enter values for a name and geographic_location to create a new instance of Classification.
+    """
     try:
         name = input("Enter the classification name: ")
         geographic_location = input("Enter the classification's geographic location: ")
@@ -201,7 +243,7 @@ def create_classification():
         print("Classification creation failed: ", exc)
 
 def update_classification():
-    """TODO"""
+    """ Prompts the user to update the attribute values of an instance of classification. """
     if classification := select_model_name_option(
         SELECT_CLASSIFICATION_PROMPT, Classification.MODEL_NAME
     ):
@@ -232,7 +274,7 @@ def update_classification():
             print("Classification update failed:", exc)
 
 def delete_classification():
-    """TODO"""
+    """ Prompts the user to delete a classification instance. """
     if classification := select_model_name_option(
         SELECT_CLASSIFICATION_PROMPT, Classification.MODEL_NAME
     ):
@@ -240,7 +282,7 @@ def delete_classification():
         print(f"Classification with name, '{classification.name}' deleted!")
 
 def list_languages_in_classification():
-    """TODO"""
+    """ Prompts the user to list all the languages of a classification. """
     if classification := select_model_name_option(
         SELECT_CLASSIFICATION_PROMPT, Classification.MODEL_NAME
     ):
@@ -267,21 +309,41 @@ classifications_menu.add_command(
 
 # Languages Menu
 def non_id_language_column_names():
-    """TODO"""
+    """ Returns all the column names from the languages table (with the exception of id).
+
+    Returns:
+        tuple: the non-id column names as a tuple 
+    """
     column_names = [column[1] for column in Language.get_column_names()]
     column_names[-1] = "classification"
     column_names = tuple(column_names[1 : len(column_names)])
     return column_names
 
 def get_language_column_lengths(header_names):
-    """TODO"""
+    """Returns the longest lengths from the cells of each non-id language column.
+
+    Args:
+        header_names (tuple): the names of the columns/headers
+
+    Returns:
+        list: the calculated column lengths as a list.
+    """
     return [
         max(len(header), int(Language.get_longest_attribute_length(header)[0]))
         for header in header_names
     ]
 
 def print_language_table_row(language, column_lengths, row_number):
-    """TODO"""
+    """ Displays to the user the information of one Language instance as a table row.
+
+    Args:
+        language (Language): the Language object.
+        column_lengths (list): the column lengths that the row should be set to.
+        row_number (int): the row number to print.
+
+    Raises:
+        TypeError: if the first argument is not an instance of Classification.
+    """
     if isinstance(language, Language):
         name = language.name
         speakers = "{:,}".format(language.number_of_speakers)
@@ -302,8 +364,12 @@ def display_languages(title, language_rows):
         print_language_table_row(language, column_lengths, row_number)
     print()
     
+def print_languages_as_table():
+    """  Displays the entire languages table to the user. """
+    display_languages("Languages", Language.get_all())
+    
 def select_language_status():
-    """ TODO """
+    """ Displays a mini menu of the different language statuses that a user is prompted to add to the language object. """
     print()
     statuses = {
         option_number + 1: status
@@ -323,7 +389,7 @@ def select_language_status():
         return status
 
 def create_language():
-    """TODO"""
+    """Prompts a user to enter values to create a new instance of Language."""
     try:
         name = input("Enter the language name: ")
         speakers = int(
@@ -343,7 +409,7 @@ def create_language():
 
 
 def update_language():
-    """ TODO """
+    """ Prompts the user to update the attribute values of an instance of Language. """
     if language := select_model_name_option(SELECT_LANGUAGE_PROMPT, Language.MODEL_NAME):
         try:
             # New name
@@ -409,14 +475,12 @@ def update_language():
             print("Language update failed:", exc)
 
 def delete_language():
-    """ TODO """
+    """ Prompts the user to delete a Language instance. """
     if language := select_model_name_option(SELECT_LANGUAGE_PROMPT, Language.MODEL_NAME):
         language.delete()
 
 
-def print_languages_as_table():
-    """ TODO """
-    display_languages("Languages", Language.get_all())
+
 
 
 languages_menu = Menu("languages")
