@@ -479,7 +479,14 @@ def delete_language():
     if language := select_model_name_option(SELECT_LANGUAGE_PROMPT, Language.MODEL_NAME):
         language.delete()
 
-
+def print_languages_filtered_by_status():
+    """ Prompts the user to select a status, so that the program will subsequently print
+        a table of all the languages of that status.
+    """
+    pass
+    status = select_language_status()
+    if filtered_languages := Language.filter_by_status(status):
+        display_languages(f"{status} Languages", filtered_languages)
 
 
 
@@ -491,6 +498,7 @@ languages_menu.add_command("Display languages table", print_languages_as_table)
 languages_menu.add_command("Create language", create_language)
 languages_menu.add_command("Update language", update_language)
 languages_menu.add_command("Delete language", delete_language)
+languages_menu.add_command("Filter by status", print_languages_filtered_by_status)
 
 # Set current menu to "main"
 current_menu = Menu.all["main"]

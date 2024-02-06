@@ -299,3 +299,16 @@ class Language:
         """
         row_count = CURSOR.execute(sql).fetchone()
         return row_count
+    
+    @classmethod
+    def filter_by_status(cls, status):
+        """Returns a list containing the Language object per row in the table, filtered by a given status. """
+        sql = """
+            SELECT *
+            FROM languages
+            WHERE status is ?
+        """
+
+        rows = CURSOR.execute(sql, (status,)).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
