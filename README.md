@@ -42,7 +42,7 @@ To run the project, <b>open up your terminal</b>. Then, navigate to the director
 
 ## Usage
 
-When you first run the program, you will receive a welcome menu that instructs you how to use this program.
+When you first run the program, you will receive a welcome message that instructs you how to use this program. This program consists of three menus: the main menu, the classifications menu, and the languages menu.
 
 ### Main Menu
 
@@ -55,6 +55,32 @@ The terminal will display a menu of options. This menu is called the main menu. 
     <li> Go to classifications menu - exists the main menu and starts displaying the menu of options to work with the classifications table.</li>
     <li> Go to classifications menu - exists the main menu and starts displaying the menu of options to work with the languages table.</li>
 </ol>
-![Example of selecting a command to execute.](/images/option_selection_example.png)
+
+Below is an example of selecting an option:
+
+![Example of selecting an option](./images/option_selection_example.png)
 
 If you type an invalid option, you will get an error message saying that.
+
+### Classifications & Languages Menu
+
+There are eight options in these menu. The first one is to exit the program. The second option is to return to the main menu. The third option is to go to the other menu (either classification or language). The other options are as follows:
+
+![Classifications menu](/images/classification_menu.png)
+![Languages menu](/images/language_menu.png)
+
+Options 3 to 6 essentially do the same thing for both menu's, just for their respective models. Note that when navigating to these menus, the tables will be printed to the user, so that you know what you can do with the current values that you have.
+
+### Future Plans
+The purpose of this project was to learn how to write my own ORM. And I have succesfully demonstrated the ability to use SQL and Python together, and to use object oriented programming to help create a simple CLI. One day I plan to try Click to learn how to create CLI's with this library.
+
+## Credits
+MIT License
+
+Copyright (c) 2023 Adnan Wazwaz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
