@@ -27,8 +27,7 @@ You can see which classification they belong to (such as Semitic, Germanic, Roma
 in the world of that language, and even whether that language is still spoken, or has gone extinct. You additionally have the ability
 to make changes to the database as you see fit.
 
-The core technologies of this application are <a href="https://www.python.org/downloads/">Python 3.8.13</a> and <a href="https://sqlitebrowser.org/dl/">SQLite3</a>. So if you wish to run this application on your machine, make sure
-you have both installed on it first.
+The core technologies of this application are <a href="https://www.python.org/downloads/">Python 3.8.13</a> and <a href="https://sqlitebrowser.org/dl/">SQLite3</a>. So if you wish to run this application on your machine, make sure you have both installed on it first. Along with python code comes with one database (language_categories.db), which consists of two tables: classifications and languages. This database represents the one-to-many relationship. A classification has many languages. A language belongs to one classification.
 
 ## Installation & Execution
 
@@ -43,3 +42,19 @@ To run the project, <b>open up your terminal</b>. Then, navigate to the director
 
 ## Usage
 
+When you first run the program, you will receive a welcome menu that instructs you how to use this program.
+
+### Main Menu
+
+The terminal will display a menu of options. This menu is called the main menu. There should be 5 options numbered 0 to 4. You can type one of those numbers to select that option and press ENTER. Once you do, that command will be executed by the program. The options are as follows:
+
+<ol start="0">
+    <li>Exit the program - Terminate this program)</li>
+    <li>Clear terminal after each command - clear the screen after you select an option number from the menu. If this option is disabled, then executing this command will enable it, and vice versa.</li>
+    <li>Display entire database - prints both the classification and language tables to the user.</li>
+    <li> Go to classifications menu - exists the main menu and starts displaying the menu of options to work with the classifications table.</li>
+    <li> Go to classifications menu - exists the main menu and starts displaying the menu of options to work with the languages table.</li>
+</ol>
+![Example of selecting a command to execute.](/images/option_selection_example.png)
+
+If you type an invalid option, you will get an error message saying that.

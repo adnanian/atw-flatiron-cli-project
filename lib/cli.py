@@ -11,6 +11,8 @@ from menu_tools.helpers import (
 def main():
     """_Runs menu for as long as the user does not terminate the program.
     """
+    print("WELCOME TO THE LANGUAGE CLASSIFICATIONS DATABASE")
+    print("TO NAVIGATE, TYPE AN OPTION NUMBER FROM THE MENU BELOW AND PRESS ENTER!")
     while True:
         menu()
         choice = input("> ")
